@@ -1,0 +1,423 @@
+---
+title: "StatisticsPractice"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#https://bookdown.org/lyzhang10/lzhang_r_tips_book/how-to-create-contingency-tables.html
+##Working with Contingecy Tables
+rm(list=ls())
+
+#load packages
+library(dplyr)
+
+
+#create a fake data set
+fk_data <- data.frame(x1 = sample(letters[1:5], 20, replace=TRUE), 
+                      x2 = sample(LETTERS[1:5], 20, replace = TRUE))
+
+#have a look at the data set
+print.data.frame(fk_data)
+
+#create a table
+my_table_0 <- table(fk_data$x1, fk_data$x2)
+print.table(my_table_0)
+
+#if we want to have row and column totals
+my_table_01<- addmargins(my_table_0)
+print.table(my_table_01)
+
+my_table_1 <- as.data.frame.matrix(my_table_0) #convert it to a dataframe
+#have a look at the table
+print.data.frame(my_table_1)
+
+#to have a table of proportions based on rows
+my_table_2 <- prop.table(my_table_0, margin = 1) %>%
+  as.data.frame.matrix() #convert it to a dataframe
+#have a look at the table
+print.data.frame(my_table_2, digits = 2)
+
+#to have a table of proportions based on columns
+my_table_3 <- prop.table(my_table_0, margin=2)%>%
+  as.data.frame.matrix() #convert it to dataframe
+#have a look at the table
+print.data.frame(my_table_2, digits = 2)
+```
+
+
+```{r}
+library(caret)
+
+##sensitivity: (AIP example) the probability of testing positive given that the subjevt has the disease
+#sensitivity(data, reference, positive=levels(reference)[1])
+
+##specificity :(AIP example) the probability of a negative test given that the subject does not have the disease
+#specificity(data, reference, negative = levels(reference)[2])
+
+# youtube vid: https://www.youtube.com/watch?v=9f5XgjWpzi0
+devtools::install_github("datacamp/RDocumentation")
+library(RDocumentation)
+
+data01 <- factor(c("A", "B", "B", "B"))
+data02 <- factor(c("A", "B", "B", "B"))
+
+ref01 <- factor(c("B", "B", "B", "B"))
+ref02 <- factor(c("B", "A", "B", "B"))
+
+#Positive Predictive Value is the probability that subjects with a positive screening test truly have the disease: p(disease+|test+)
+table(data01, ref01)
+sensitivity(data01, ref01) #0.75
+posPredValue(data01, ref01) 
+
+table(data02, ref02)
+sensitivity(data02, ref02) #0
+posPredValue(data02, ref02) #0
+
+data03 <- factor(c("A", "B", "B", "B"))
+data04 <- factor(c("B", "B", "B", "B"))
+
+ref03 <- factor(c("B", "B", "B", "B"), levels = c("A", "B"))
+ref04 <- factor(c("B", "A", "B", "B"))
+
+##Negative Predictive Value: the probability that subjects with a negative screening test truly dont have the disease. 
+table(data03, ref03)
+specificity(data03, ref03) #0.75
+negPredValue(data03, ref03) 
+
+table(data04, ref04)
+specificity(data04, ref04) #1
+negPredValue(data04, ref04) #NaN
+
+if(!isTRUE(all.equal(sensitivity(data01, ref01), .75))) stop("error in sensitivity test 1")
+if(!isTRUE(all.equal(sensitivity(data02, ref02), 0))) stop("error in sensitivity test 2")
+ref03 <- factor(c("B", "B", "B", "B"))
+if(!is.na(sensitivity(data02, ref03, "A"))) stop("error in sensitivity test3")
+      
+   options(show.error.messages = FALSE)
+   test1 <-try(sensitivity(data02, as.character(ref03)))
+   if(grep("Error", test1) != 1)
+      stop("error in sensitivity calculation - allowed non-factors")
+   options(show.error.messages = TRUE)
+   
+   
+   ref03 <- factor(c("B", "B", "B", "B"), levels = c("A", "B"))
+   
+   if(!isTRUE(all.equal(specificity(data03, ref03), .75))) stop("error in specificity test 1")
+
+   if(!isTRUE(all.equal(specificity(data04, ref04), 1.00))) stop("error in specificity test 2")
+
+   if(!is.na(specificity(data01, ref01, "A"))) stop("error in specificity test3")
+      
+   options(show.error.messages = FALSE)
+   test1 <-try(specificity(data04, as.character(ref03)))
+   if(grep("Error", test1) != 1)
+      stop("error in specificity calculation - allowed non-factors")
+   options(show.error.messages = TRUE)
+
+```
+
+```{r}
+ #Prevalence: the fraction of individuals in a population who have a disease
+   #Usage: prevalence(model, type = c("pop", "bnp", "wnp"), i=NULL, ...)
+set.seed(0934)
+Data.All.df.2008 <- data.frame(FSA = sample(c("N8N", "N8R", "B3L", "P1H"), 50, T),
+                               Lyme = sample(0:1, 50, T),
+                               stringsAsFactors = F)
+
+# First 10 observations.
+head(Data.All.df.2008)
+#prevalence can be calculated as the number of positive diagnoses divided by the total number of observations, i.e. sum(Lyme)/n()
+library(dplyr)
+Data.All.df.2008 %>%
+  group_by(FSA) %>%
+  summarise(Prevalence = sum(Lyme)/n())
+
+#base rate fallacy: if presented with related base rate information (generic, general information) and specific information (information pertaining only to a certain case), themind tends to ignore the forer and focus on the latter. 
+```
+##Frequentist vs. Bayesian Statistics
+Frequentist Statistics avoids calculations involving prior odds, and therefor yields results that are prone to misinterpretation due to the base rate fallacy.  Frequentist statistics is used heavily in biological research.  Frequentist statistics can still be useful and informative if you know exactly what to watch out for. 
+
+Bayesian Statistics explicitly accounts for prior odds. It requires prior information that is often hard to quantify. 
+It is central to the modern machine learning and more advanced areas of quantitative biology. Experimental researchers in biology tend not to use Bayesian statistics.  
+
+```{r}
+##Fisher's Exact text
+#Usage: fisher.test(x, y = NULL, workspace = 200000, hybrid = FALSE,
+            #hybridPars = c(expect = 5, percent = 80, Emin = 1),
+            #control = list(), or = 1, alternative = "two.sided",
+            #conf.int = TRUE, conf.level = 0.95,
+            #simulate.p.value = FALSE, B = 2000)
+
+## A British woman claimed to be able to distinguish whether milk or
+##  tea was added to the cup first.  To test, she was given 8 cups of
+##  tea, in four of which milk was added first.  The null hypothesis
+##  is that there is no association between the true order of pouring
+##  and the woman's guess, the alternative that there is a positive
+##  association (that the odds ratio is greater than 1).
+
+TeaTasting <-
+  matrix(c(3,1,1,3), 
+         nrow=2, 
+         dimnames = list(Guess = c("Milk", "Tea"), 
+                         Truth = c("Milk", "Tea")))
+fisher.test(TeaTasting, alternative = "greater")
+```
+Bernoulli Distribution: a discrete distribution having two possible outcomes labeled by n=0 and n=1 in which n=1("success") occurs with probability p and n=0 ("failure") occurs with porbability q = 1-p, where 0<p<1.  Describes probabilities for a binary variable. (Biased coin example); when the probabilities sum up to 100%. 
+```{r}
+##Binomial Tests
+#A binomial test compares the number of successes observed in a given number of trials with a hypothesized probability of success.  The tes has the null hypothesis that the real probability of success is equal to some value denoted p. and thr alternative hypothesis that is not equal to p. The test can also be performed with a one-sided alternative hypothesis that the real probability of success is either greater than p or that it is less than p. 
+#binom.test(nsuccesses, ntrials, p)
+binom.test(60, 300, 1/6, alternative = "greater")
+#One-tailed test with a significance level of 0.05 will be used. You roll the die 300 times and throw a total of 60 sixes. We cannot reject the null hypothesis that the probability of rolling a six is 1/6. This means that there is no evidence to prove that the die is not fair. 
+```
+
+```{r}
+##Chi Square Tests : used to determine if two categorical variables have a significant correlation between them. The two variables are selected from the same population. (Male/female, red/green, yes/no)
+#chisp.test(data)
+data_frame<- read.csv("https://goo.gl/j6lRXD")
+table(data_frame$treatment, data_frame$improvement)
+
+chisq.test(data_frame$treatment, data_frame$improvement, correct=FALSE)
+#We get a chi-squared value of 5.5569. Since we get a pvalue less than the significance level of .05, we reject the null hypothesis and conclude that the two variables are in fact dependent. 
+#Chi-square statistic is commonly used for testing relationships between categorical variables. 
+
+data("mtcars")
+table(mtcars$carb, mtcars$cyl)
+
+chisq.test(mtcars$carb, mtcars$cyl)
+#df=degrees of freedom
+#We get a high chi-squared value and a p-value of less than 0.05 significance level. So we reject the null hypothesis and conclude that carb and cyl have a significant relationship. 
+```
+
+###Confidence Intervals and P-values
+#pvalues quantify the probability of data being as or more extreme than the data in hand, were the null hypothesis true.  
+#Confidence Intervals are more informative than p-values. We can reject a null hypothesis if it lies outside of the confidence interval. 
+
+Frequentist Statistics vs Bayesian Statistics (revisited)
+# Frequentist statistics (aka classical statistics) focusses on likelihood. 
+#       p(data|hypothesis)
+#**Iron Law of Frequentist Statistics: Never compute the probability of a hypothesis. 
+
+#Bayesian Statistics focusses on computing posterior probabilites. 
+#     p(hypothesis|data)
+
+```{r}
+## Gaussian Distributions = "the normal distribution" is ubiquitous in statistics. 
+# The central limit theorem states that the population of all possible samples of size n from a population with mean u and variance (sd squared) approaches a normal distribution when n approaches infinity.  Central limit theorem makes the normal distribution extremely relevant.  
+#The parameters of a statistical model that has been fit to a large dataset will have lingering uncertainty, but this uncertaintywill very often be approximately normally distributed. This is why statisticians so often assume that experimental measurements follow normal distributions. 
+
+pnorm(84, mean = 72, sd = 15.2, lower.tail = FALSE)
+#This means that the percentage of students scoring an 84 or higher in the college entrance exam is 21.5%.  
+```
+
+```{r}
+##Standard Error of the Mean (SEM)
+
+Input =("
+Stream                     Fish
+ Mill_Creek_1                76
+ Mill_Creek_2               102
+ North_Branch_Rock_Creek_1   12
+ North_Branch_Rock_Creek_2   39
+ Rock_Creek_1                55
+ Rock_Creek_2                93
+ Rock_Creek_3                98
+ Rock_Creek_4                53
+ Turkey_Branch              102
+")
+
+Data = read.table(textConnection(Input),header=TRUE)
+
+##calculate standard error manually
+sd(Data$Fish, na.rm=TRUE) /
+  sqrt(length(Data$Fish[!is.na(Data$Fish)]))
+
+#in colsole, load: install.packages("psych")
+#Use describe function from psych package for standard error
+#This function also works on whole dataframes
+library(psych)
+describe(Data$Fish, 
+         type=2)
+
+#The standard error of the mean (SEM) is a statistical term that measures the accuracy with which a sample distribution represents a population by using the standard deviation. In statistics, a smaple mean deviates from the actual mean of a population - this deviation is the standard error of the mean (SEM)
+```
+
+```{r}
+#z-test : This function is based on the standard normal distribution and creates confidence intervals and tests hypotheses for both one and two sample problems. 
+# z.test(x, y=NULL, alternative = "two-sided", mu = 0, sigma.x=NULL, sigma.y=NULL, conf.level=0.95)
+#mu = a single number representing the value of the mean or difference in means specified by the null hypothesis
+#sigma.x = a single number representing the population standard deviation for x
+#sigma.y = a singlw number representing the population standard deviation for y
+```
+#An R function called z.test() would be great for doing the kind of testing in which you use z-scores in the hypothesis test. One problem" that function does not exist in base R.  Although you can find one in other packages, it's easy enough to create one and learn a bit about R programming in the process. The function would work like this:
+ID.data <- c(100,101,104, 109, 125, 116, 105, 108, 110)
+z.test(IQ.data, 100, 15)
+z=1.733
+one-tailed probability = 0.042
+two-tailed probability = 0.084
+#Begin by creating the function name and its arguments:
+z.test=function(x, mu, popvar){
+#The first argument is the vector of data, second is the population mean, third is the population variance. Left curly bracket signifies that the remainder of the code is what happens inside the function. 
+#Next, create a vector that will hold the one-tailed probability of the z-score you will calculate:
+one.tail.p <- NULL
+#Then you calculate the z-score and round it to three decimal places
+z.score<- round((mean(x)-mu)/popvar/sqrt(length(x))), 3)
+
+
+
+```{r}
+##T-Tests: the t.test() function produces a variety of t-tests. Unlike most statistical packages, the default assume unequal variance and applies the Welch df modification.
+##Welch's T-Tests: or unequal variances t-test, is a two-sample location test which is used to test the hypothesis that the two populations have equal means. 
+# independent 2-group t-test, where y is numeric and x is a binary factor
+x=rnorm(10)
+y=rnorm(10)
+t.test(y,x)  #Welch's t-test
+
+# independent 2-group t-test, where y1 and y2 are numeric
+t.test(y1,y2) 
+
+# paired t-test where y1 & y2 are numeric
+t.test(y1,y2,paired=TRUE) 
+
+# one sample t-test
+t.test(y,mu=3) # Ho: mu=3
+```
+
+```{r}
+##Two data samples are independent if they come from distinct populations and the samples do not affect each other. Using the Mann_whitney-Wilcoxon Test, we can decide whether the population distributions are identical without assuming them to follow the normal distribution. 
+mtcars$mpg
+wilcox.test(mpg ~ am, data=mtcars)
+#At .05 significance level, we conclude that the gas mileage data of manual and automatic transmissions in mtcar are nonidentical populations. 
+```
+
+```{r}
+##QQ Plots : are used to visually test whether data follows an expected distribution.  Used to verify that data used in a t-test is actually normally distributed
+#QQ plots are not very helpful on small datasets
+#in console: install.packages("car")
+library(car)
+my_data <- ToothGrowth
+
+qqnorm(my_data$len, pch = 1, frame = FALSE)
+qqline(my_data$len, col = "steelblue", lwd=2)
+qqPlot(my_data$len)
+
+```
+
+```{r}
+## r = the correlation coefficient.  The main result of a correlation is called the correlation coefficient(or "r").  It ranges from -1 to 1.  The closer r us to =1 or -1, the more closely the two variables are related.  If r is close to 0, it means there is no relationship between the variables. 
+# when r = 0, the two varibales are independent
+# when r = -1/1, the two variables share a deterministic linear relationship
+
+##r-squared is always between 0 and 1. it is commonly interpreted as the fraction of variance in y explained by x (or the other way around)
+
+#We apply the lm function to a formula that desribes the variable eruptions by the variable waiting, and save the linear regression model in a new variable eruption.lm.  
+eruption.lm = lm(eruptions ~ waiting, data=faithful)
+summary(eruption.lm)$r.squared 
+summary(eruption.lm)
+#The coefficient of determination of the simple linear regression model for the data set faithful is 0.81146
+```
+
+```{r}
+##Power Analysis
+# In console, install.packages("pwr")
+# The power of a statistical test is the probability that the test will reject a false null hypothesis.  Power analysis allows us to determine the sample size required to detect an effect of a given size with a given degree of confidence.  It also allows us to determine the probability of detecting an effect of a given size with a given level of confidence, under sample size constraints.  
+#pwr.2p.test -- two proportions (equal n)
+#pwr.2p2n.test -- two proportions(unequal n)
+#pwr.anova.test -- balanced one-way ANOVA
+#pwr.chisq.test  -- chi-square test
+#pwr.f2.test -- general linear model
+#pwr.p.test	-- proportion (one sample)
+#pwr.r.test	--correlation
+#pwr.t.test	-- t-tests (one sample, 2 sample, paired)
+#pwr.t2n.test	-- t-test (two samples with unequal n)
+
+library(pwr)
+pwr.p.test(h=ES.h(p1=0.75, p2=0.50), 
+           sig.level = 0.05,
+           power = 0.80, 
+           alternative = "greater")
+#The function tells us we should flip the coin 22.55126 times, which would round up to 23.  Always round sample size estimates up. if we are correct that our coin lands heads 75% of the time, we need to flip at least 23 times to have an 80% chance of correctly rejecting the null hypothesis at the 0.05 significance level. 
+
+p.out <- pwr.p.test(h = ES.h(p1 = 0.75, p2 = 0.50),
+                    sig.level = 0.05,
+                    power = 0.80,
+                    alternative = "greater")
+plot(p.out)
+#What is the power of our test if we flip the coin 40 times and lower our Type I error tolerance to 0.01? Notice we leave out the power argument, add n = 40, and change sig.level = 0.01:
+pwr.p.test(h = ES.h(p1 = 0.75, p2 = 0.50),
+           sig.level = 0.01,
+           n = 40,
+           alternative = "greater")
+#The power of our test is now about 84%. If we wish to assume a “two-sided” alternative, we can simply leave it out of the function. Notice how our power estimate drops below 80% when we do this.
+pwr.p.test(h = ES.h(p1 = 0.75, p2 = 0.50),
+           sig.level = 0.01,
+           n = 40)
+```
+
+```{r}
+##ANOVA tests.(Analysis of Variance) ANOVA is a statistical test for estimating how a quantitative dependent variable changes according to the levels of one or more categorical independent variables.  ANOVA tests whether there is a difference in means of the groups at each level of the independent variable. 
+library(dplyr)
+PATH<- "https://raw.githubusercontent.com/guru99-edu/R-Programming/master/poisons.csv"
+df <- read.csv(PATH) %>%
+select(-X) %>% 
+mutate(poison = factor(poison, ordered = TRUE))
+glimpse(df)
+
+#You can check the levels of poison with the following. You should see three character values because you convert them in factor with the mutate verb. 
+levels(df$poison)
+#Compute the mean and the standard deviation
+df %>%
+  group_by(poison)%>%
+  summarise(
+    count_poison = n(), 
+    mean_time = mean(time, na.rm = TRUE),
+    sd_time = sd(time, na.rm=TRUE)
+  )
+#Graphically check if there is a difference between the distribution. 
+ggplot(df, aes(x = poison, y = time, fill = poison)) +
+    geom_boxplot() +
+    geom_jitter(shape = 15,
+        color = "steelblue",
+        position = position_jitter(0.21)) +
+    theme_classic()
+#Run the one-way ANOVA test with the command aov. 
+#basic syntax for ANOVA test: aov(formula, data)
+anova_one_way <- aov(time~poison, data = df)
+summary(anova_one_way)
+
+#Tukeys Test: 
+TukeyHSD(anova_one_way)
+
+##ANOVA two-way test
+anova_two_way <- aov(time~poison + treat, data = df)
+summary(anova_two_way)
+```
+
+```{r}
+##Linear Regression
+library(tidyverse)
+library(caret)
+theme_set(theme_classic())
+# Load the data
+data("Boston", package = "MASS")
+# Split the data into training and test set
+set.seed(123)
+training.samples <- Boston$medv %>%
+  createDataPartition(p = 0.8, list = FALSE)
+train.data  <- Boston[training.samples, ]
+test.data <- Boston[-training.samples, ]
+```
+
+
+
+
+
+
+
+
+
+
