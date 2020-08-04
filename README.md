@@ -6,4 +6,5 @@ Statistical concepts and examples based on Justin Kinny's course Practical Stati
 Caroline
 
 ## python
-Sarah
+Sarah:
+pythonised version of Justin's course using jupiter notebooks, python v 3.7...
