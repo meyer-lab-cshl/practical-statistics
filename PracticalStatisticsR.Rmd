@@ -277,11 +277,11 @@ x=rnorm(10)
 y=rnorm(10)
 t.test(y,x)  #Welch's t-test
 
-# independent 2-group t-test, where y1 and y2 are numeric
-t.test(y1,y2) 
+# independent 2-group t-test, where y1 and y2 are numeric, another example of syntax with numerics
+#t.test(y1,y2)  
 
-# paired t-test where y1 & y2 are numeric
-t.test(y1,y2,paired=TRUE) 
+# paired t-test where y1 & y2 are numeric, another example of syntax with numerics
+#t.test(y1,y2,paired=TRUE)  
 
 # one sample t-test
 t.test(y,mu=3) # Ho: mu=3
@@ -398,7 +398,7 @@ summary(anova_two_way)
 ```
 
 ```{r}
-##Linear Regression
+##Nonlinear Regression
 library(tidyverse)
 library(caret)
 theme_set(theme_classic())
@@ -410,14 +410,74 @@ training.samples <- Boston$medv %>%
   createDataPartition(p = 0.8, list = FALSE)
 train.data  <- Boston[training.samples, ]
 test.data <- Boston[-training.samples, ]
+
+#First, visualize the scatter plot of the medv vs lstat variables:
+ggplot(train.data, aes(lstat, medv) ) +
+  geom_point() +
+  stat_smooth()
+
 ```
 
 
+```{r}
+#The standard linear regression model equation can be written as medv=b0+b1*lstat
+#Compute the linear regression model:
+# Build the model
+model <- lm(medv ~ lstat, data = train.data)
+# Make predictions
+predictions <- model %>% predict(test.data)
+# Model performance
+data.frame(
+  RMSE = RMSE(predictions, test.data$medv),
+  R2 = R2(predictions, test.data$medv)
+)
+ggplot(train.data, aes(lstat, medv) ) +
+  geom_point() +
+  stat_smooth(method = lm, formula = y ~ x)
+
+```
+
+```{r}
+#Polynomial Regression: adds polynomial or quadratic terms to the regression equations
+#polynomial regression can be coputed as follows:
+lm(medv ~ lstat + I(lstat^2), data = train.data)
+#or
+lm(medv ~ poly(lstat, 2, raw = TRUE), data = train.data)
+
+lm(medv ~ poly(lstat, 6, raw = TRUE), data = train.data) %>%
+  summary()
+
+# Build the model
+model <- lm(medv ~ poly(lstat, 5, raw = TRUE), data = train.data)
+# Make predictions
+predictions <- model %>% predict(test.data)
+# Model performance
+data.frame(
+  RMSE = RMSE(predictions, test.data$medv),
+  R2 = R2(predictions, test.data$medv)
+)
+
+ggplot(train.data, aes(lstat, medv) ) +
+  geom_point() +
+  stat_smooth(method = lm, formula = y ~ poly(x, 5, raw = TRUE))
+```
 
 
+```{r}
+#Log Tranformation: when tou have a non-linear relationship, you can try a logarithmic transformation of the predictor variables:
+# Build the model
+model <- lm(medv ~ log(lstat), data = train.data)
+# Make predictions
+predictions <- model %>% predict(test.data)
+# Model performance
+data.frame(
+  RMSE = RMSE(predictions, test.data$medv),
+  R2 = R2(predictions, test.data$medv)
+)
 
-
-
-
+ggplot(train.data, aes(lstat, medv) ) +
+  geom_point() +
+  stat_smooth(method = lm, formula = y ~ log(x))
+```
 
 
