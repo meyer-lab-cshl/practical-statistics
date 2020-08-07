@@ -6,6 +6,8 @@ Statistical concepts and examples based on Justin Kinny's course Practical Stati
 Caroline
 
 ## python
-Sarah:
-pythonised version of Justin's course using jupiter notebooks, python v 3.7...
-Let's also do a remote change.
+
+The python file contains a pythonised version of Justin's course using Python v 3.8. 
+Necessary libraries and packages are listed with each example. 
+Definitions and context can be found via associated web links. 
+
