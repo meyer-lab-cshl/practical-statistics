@@ -3,26 +3,33 @@ title: "Practical Statistics for Experimental Biologists in RStudio"
 author: "Caroline Walter"
 date: "August 2020"
 output:
-  pdf_document:
-    number_sections: yes
+  html_document:
+    df_print: paged
     toc: yes
-    toc_depth: 3
+    toc_depth: '3'
   html_notebook:
     number_sections: yes
     toc: yes
     toc_depth: 3
     toc_float: yes
+  pdf_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
 ---
 
 # Background
 
-This course will be reviewing some practical statistics work in the R computing language used in experimental biology.  
+This course will be reviewing some practical statistics work in the R computing language useful in experimental biology.  
 
 ```{r echo = FALSE, include=FALSE, fig.align = "center"}
 knitr::opts_chunk$set(echo = TRUE, message=FALSE)
 ```
 
-```{r}
+
+Below are the necessary libraries for the statistical work we will be doing. 
+
+```{r message = FALSE}
 #Loading libraries
 library(caret)
 library(tidyverse)
@@ -31,11 +38,12 @@ library(RDocumentation)
 library(psych)
 library(car)
 library(pwr)
+library(tinytex)
 ```
 
 # Contingecy Tables
 
-```{r}
+```{rmessage = FALSE}
 rm(list=ls())
 #create a fake data set
 fk_data <- data.frame(x1 = sample(letters[1:5], 20, replace=TRUE), 
@@ -71,15 +79,15 @@ print.data.frame(my_table_2, digits = 2)
 # Sensitivity and Specificity
 
 For the AIP test:
-## Sensitivity: (AIP example) the probability of testing positive given that the subjevt has the disease
+  * Sensitivity: (AIP example) the probability of testing positive given that the subjevt has the disease
 
 $Sensitivity = p(test^+|disease^+)=82%$
 
-## Specificity: (AIP example) the probability of a negative test given that the subject does not have the disease
+  * Specificity: (AIP example) the probability of a negative test given that the subject does not have the disease
 
 $Specificity = p(test^-|disease^-)=96.3%$
 
-```{r}
+```{r message = FALSE}
 # youtube vid: https://www.youtube.com/watch?v=9f5XgjWpzi0
 devtools::install_github("datacamp/RDocumentation")
 
@@ -90,13 +98,14 @@ ref01 <- factor(c("B", "B", "B", "B"))
 ref02 <- factor(c("B", "A", "B", "B"))
 ```
 
-## Positive Predictive Value (PPV): the probability that subjects with a positive screening test truly have the disease 
+# Positive Predictive Value (PPV)
+Positive Predictive Value is the probability that subjects with a positive screening test truly have the disease 
 
 $p(disease^+|test^+) = \frac{TP}{TP+FP}=\frac{82}{82+36,996}=0.22%$
 
 Even if you test positive, the probablity of you having AIP is still very low. 
 
-```{r}
+```{r message = FALSE}
 table(data01, ref01)
 sensitivity(data01, ref01) 
 posPredValue(data01, ref01) 
@@ -112,11 +121,13 @@ ref03 <- factor(c("B", "B", "B", "B"), levels = c("A", "B"))
 ref04 <- factor(c("B", "A", "B", "B"))
 ```
 
-## Negative Predictive Value (NPV): the probability that subjects with a negative screening test truly do not have the disease.  
+# Negative Predictive Value (NPV)
+
+Begative predictive value is the probability that subjects with a negative screening test truly do not have the disease.  
 
 $p(disease^-|test^-)$
 
-```{r}
+```{r message = FALSE}
 
 table(data03, ref03)
 specificity(data03, ref03) #0.75
@@ -154,11 +165,11 @@ if(!is.na(sensitivity(data02, ref03, "A"))) stop("error in sensitivity test3")
 
 ```
 
-## Prevalence
+# Prevalence
 Prevalence is the fraction of individuals in a population who have a disease. 
 $prevalence = p(disease^+) = 50%$
 
-```{r}
+```{r message = FALSE}
 #Usage: prevalence(model, type = c("pop", "bnp", "wnp"), i=NULL, ...)
 set.seed(0934)
 Data.All.df.2008 <- data.frame(FSA = sample(c("N8N", "N8R", "B3L", "P1H"), 50, T),
@@ -174,7 +185,7 @@ Data.All.df.2008 %>%
 
 ```
 
-## Frequentist vs. Bayesian Statistics
+# Frequentist vs. Bayesian Statistics
 *Frequentist Statistics (aka classical statistics) focusses on likelihood.  It avoids calculations involving prior odds, and therefore yields results that are prone to misinterpretation due to the base rate fallacy.  Frequentist statistics is used heavily in biological research.  It can still be useful and informative if you know exactly what to watch out for. 
 
 $p(data|hypothesis)$
@@ -188,12 +199,12 @@ It is central to the modern machine learning and more advanced areas of quantita
 $p(hypothesis|data)$
 
 
-## Fisher's Exact Test
+# Fisher's Exact Test
 Fisher's exact test is a statistical significane test used in the analysis of contingency tables and in place of chi square test in 2 by 2 tables, especially in cases of small samples.  The test is useful for categorical data that result from classifying objects in two different ways; it is used to examine the significance of the association (contingency) between the two kinds of classification. 
 
 Example: A British woman claimed to be able to distinguish whether milk or tea was added to the cup first.  To test, she was given 8 cups of tea, in four of which milk was added first.  The null hypothesis is that there is no association between the true order of pouring and the woman's guess, the alternative that there is a positive association (that the odds ratio is greater than 1).
 
-```{r}
+```{r message = FALSE}
 #Usage: fisher.test(x, y = NULL, workspace = 200000, hybrid = FALSE,
             #hybridPars = c(expect = 5, percent = 80, Emin = 1),
             #control = list(), or = 1, alternative = "two.sided",
@@ -214,12 +225,12 @@ Bernoulli Distribution: a discrete distribution having two possible outcomes lab
 Example: A Biased Coin 
 Biased coins are modeled using a Bernoulli distribution, which describes probabilities for a binary variable. 
 
-#Binomial Tests
+# Binomial Tests
 A binomial test compares the number of successes observed in a given number of trials with a hypothesized probability of success.  The tes has the null hypothesis that the real probability of success is equal to some value denoted p. and thr alternative hypothesis that is not equal to p. The test can also be performed with a one-sided alternative hypothesis that the real probability of success is either greater than p or that it is less than p. 
 
 A one-tailed test with a significance level of 0.05 will be used.  You roll the die 300 times and throw a total of 60 sixes.  We cannot reject the null hypothesis that the probability of rolling a six is 1/6.  This means that there is no evidence to prove that the die is not fair.  
 
-```{r}
+```{r message = FALSE}
 #binom.test(nsuccesses, ntrials, p)
 binom.test(60, 300, 1/6, alternative = "greater")
 ```
@@ -233,7 +244,7 @@ Example A: Here, we get a chi-squared value of 5.5569.  Since we get a p-value l
 
 Example B: Here, we get a high chi-squared value and a p-value of less than the 0.05 significance level.  Therefore, we can reject the null hypothesis and conclude that carb and cyl have a significant relationship.  
 
-```{r}
+```{r message = FALSE}
 #Syntax: chisp.test(data)
 data_frame<- read.csv("https://goo.gl/j6lRXD")
 table(data_frame$treatment, data_frame$improvement)
@@ -247,11 +258,11 @@ table(mtcars$carb, mtcars$cyl)
 chisq.test(mtcars$carb, mtcars$cyl)
 ```
 
-## Confidence Intervals and P-values
+# Confidence Intervals and P-values
 *P-values quantify the probability of data being as or more extreme than the data in hand, were the null hypothesis true.  
 *Confidence Intervals are more informative than p-values. We can reject a null hypothesis if it lies outside of the confidence interval. 
 
-## Gaussian/Normal Distributions 
+# Gaussian/Normal Distributions 
 Gaussian distribution ("the normal distribution") is ubiquitous in statistics. This distribution is based on the mean μ and standard deviation σ of the data.  
 
 $x~Normal(μ, σ^2)$
@@ -269,16 +280,16 @@ The goal of statistical inference is to determine the mean and standard devistio
 
 Example: Here, this normal/gaussian distribution results shows that the percentage of students scoring an 84% or higher in the college entrance exam is 21.5%
 
-```{r} 
+```{r message = FALSE} 
 pnorm(84, mean = 72, sd = 15.2, lower.tail = FALSE)
 ```
 
-## Standard Error of the Mean (SEM)
+# Standard Error of the Mean (SEM)
 The standard error of the mean (SEM) is a statistical term that measures the accuracy with which a sample distribution represents a population by using the standard deviation. In statistics, a smaple mean deviates from the actual mean of a population - this deviation is the standard error of the mean (SEM)
 
 $SEM = \sqrt{q(1-q)/N}$
 
-```{r}
+```{r message = FALSE}
 Input =("
 Stream                     Fish
  Mill_Creek_1                76
@@ -294,10 +305,12 @@ Stream                     Fish
 
 Data = read.table(textConnection(Input),header=TRUE)
 
+
 ##calculate standard error manually
 sd(Data$Fish, na.rm=TRUE) /
   sqrt(length(Data$Fish[!is.na(Data$Fish)]))
 
+#intall psych package in console
 #Use describe function from psych package for standard error
 #This function also works on whole dataframes
 describe(Data$Fish, 
@@ -306,7 +319,7 @@ describe(Data$Fish,
 ```
 
 
-## Z-Tests 
+# Z-Tests 
 The z-test function is based on the standard normal distribution and creates confidence intervals and tests hypotheses for both one and two sample problems. 
 
 $z = \frac{x-μ}{σ}$
@@ -356,7 +369,7 @@ S^2 is an estimator of the common variance of the two samples.
 *Welch's T-Tests
 (or unequal variances t-test), is a two-sample location test which is used to test the hypothesis that the two populations have unequal means.  
 
-```{r}
+```{r message = FALSE}
 # independent 2-sample t-test, where y is numeric and x is a binary factor
 x=rnorm(10)
 y=rnorm(10)
@@ -371,7 +384,7 @@ Two data samples are independent if they come from distinct populations and the 
 
 Example:  At the 0.05 significance level, we conclude that the gas mileage data of manual and automatic transmissions in mtcar are nonidentical populations. 
 
-```{r}
+```{r message = FALSE}
 mtcars$mpg
 wilcox.test(mpg ~ am, data=mtcars)
 ```
@@ -379,7 +392,7 @@ wilcox.test(mpg ~ am, data=mtcars)
 
 # QQ Plots
 QQ Plots are used to visually test whether data follows an expected distribution.  They are used to verify that data used in a t-test is actually normally distributed.  QQ plots are not useful on small datasets.  
-```{r}
+```{r message = FALSE}
 #in console: install.packages("car")
 my_data <- ToothGrowth
 
@@ -411,7 +424,7 @@ $R^2 = \frac{variance explained by model}{total variance}$
 
   *Example: The coefficient of determination (r squared) of the simple linear regression model for the data set below is 0.81146.  This means with an r-squared of 0.81146, then approximately 81.15% of the observed variation can be explained by the model's inputs.   
   
-```{r}
+```{r message = FALSE}
 #We apply the lm function to a formula that desribes the variable eruptions by the variable waiting, and save the linear regression model in a new variable eruption.lm.  
 eruption.lm = lm(eruptions ~ waiting, data=faithful)
 summary(eruption.lm)$r.squared 
@@ -419,12 +432,12 @@ summary(eruption.lm)
 
 ```
 
-## Power Analysis
+# Power Analysis
 The power of a statistical test is the probability that the test will reject a false null hypothesis.  Power analysis allows us to determine the sample size required to detect an effect of a given size with a given degree of confidence.  It also allows us to determine the probability of detecting an effect of a given size with a given level of confidence, under sample size constraints. 
 
 *Example: The function tells us we should flipthe coin 22.55126 times, which would round up to 23.  Always round sample size estimates up in power analyses.  If we are correct that our coin lands heads 75% of the time, we need to flip at least 23 times to have an 80% chance of correctly rejecting the null hypothesis at the 0.05 significance level.  
 
-```{r}
+```{r message = FALSE}
 
 #pwr.2p.test -- two proportions (equal n)
 #pwr.2p2n.test -- two proportions(unequal n)
@@ -451,7 +464,7 @@ plot(p.out)
 Example: What is the power of our test if we flip the coin 40 times and lower our Type I error tolerance to 0.01? Notice we leave out the power argument, add n = 40, and change sig.level = 0.01:
 
 The power of our test is now about 84%.  If we wish to assume a "two-sided" alternative, we can simply leave it out of the function. Notice how our power estimate drops below 80% when we do this.
-```{r}
+```{r message = FALSE}
 pwr.p.test(h = ES.h(p1 = 0.75, p2 = 0.50),
            sig.level = 0.01,
            n = 40,
@@ -462,12 +475,12 @@ pwr.p.test(h = ES.h(p1 = 0.75, p2 = 0.50),
            n = 40)
 ```
  
-## ANOVA tests (Analysis of Variance)
+# ANOVA tests (Analysis of Variance)
 ANOVA is a statistical test for estimating how a quantitative dependent variable changes according to the levels of one or more categorical independent variables.  ANOVA tests whether there is a difference in means of the groups at each level of the independent variable.
 
 Example: You can check the levels of poison with the following. You should see three character values because you convert them in factor with the mutate verb. 
 
-```{r}
+```{r message = FALSE}
 PATH<- "https://raw.githubusercontent.com/guru99-edu/R-Programming/master/poisons.csv"
 df <- read.csv(PATH) %>%
 select(-X) %>% 
@@ -503,9 +516,9 @@ anova_two_way <- aov(time~poison + treat, data = df)
 summary(anova_two_way)
 ```
 
-## Nonlinear Regression
+# Nonlinear Regression
 
-```{r}
+```{r message = FALSE}
 theme_set(theme_classic())
 # Load the data
 data("Boston", package = "MASS")
@@ -528,7 +541,8 @@ The standard linear regression model equation can be writted as:
 $medv = b0+b1*lstat$
 
 Compute the linear regression model:
-```{r}
+
+```{r message = FALSE}
 # Build the model
 model <- lm(medv ~ lstat, data = train.data)
 # Make predictions
@@ -544,10 +558,10 @@ ggplot(train.data, aes(lstat, medv) ) +
 
 ```
 
-## Polynomial Regression
+# Polynomial Regression
 Polynomial regression: adds polynomial or quadratic terms to the regression equations
 
-```{r}
+```{r message = FALSE}
 lm(medv ~ lstat + I(lstat^2), data = train.data)
 #or
 lm(medv ~ poly(lstat, 2, raw = TRUE), data = train.data)
@@ -572,7 +586,7 @@ ggplot(train.data, aes(lstat, medv) ) +
 
 ## Log Transformation
 Log transformation: when you have a non-linear relationship, you can try a logarithmic transormation of the predictor variables: 
-```{r}
+```{r message = FALSE}
 
 # Build the model
 model <- lm(medv ~ log(lstat), data = train.data)
