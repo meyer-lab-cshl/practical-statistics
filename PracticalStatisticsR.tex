@@ -121,110 +121,82 @@
 This course will be reviewing some practical statistics work in the R
 computing language useful in experimental biology.
 
+Below are the necessary libraries for the statistical work we will be
+doing.
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#Loading libraries}
 \KeywordTok{library}\NormalTok{(caret)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'caret' was built under R version 4.0.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(tidyverse)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'tidyverse' was built under R version 4.0.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(dplyr)}
 \KeywordTok{library}\NormalTok{(RDocumentation)}
 \KeywordTok{library}\NormalTok{(psych)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'psych' was built under R version 4.0.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(car)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'car' was built under R version 4.0.2
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: package 'carData' was built under R version 4.0.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(pwr)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'pwr' was built under R version 4.0.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(tinytex)}
 \end{Highlighting}
 \end{Shaded}
 
 \hypertarget{contingecy-tables}{%
 \section{Contingecy Tables}\label{contingecy-tables}}
 
+\begin{itemize}
+\tightlist
+\item
+  create a fake data set
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list=}\KeywordTok{ls}\NormalTok{())}
-\CommentTok{#create a fake data set}
 \NormalTok{fk_data <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{x1 =} \KeywordTok{sample}\NormalTok{(letters[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{], }\DecValTok{20}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{), }
                       \DataTypeTok{x2 =} \KeywordTok{sample}\NormalTok{(LETTERS[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{], }\DecValTok{20}\NormalTok{, }\DataTypeTok{replace =} \OtherTok{TRUE}\NormalTok{))}
-\CommentTok{#have a look at the data set}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  have a look at the data set
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{print.data.frame}\NormalTok{(fk_data)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 ##    x1 x2
-## 1   e  D
-## 2   c  C
-## 3   a  E
+## 1   b  D
+## 2   a  E
+## 3   c  B
 ## 4   a  A
-## 5   a  C
-## 6   b  C
-## 7   c  B
-## 8   b  D
-## 9   d  C
-## 10  d  E
-## 11  e  B
-## 12  c  D
-## 13  d  B
+## 5   b  C
+## 6   a  A
+## 7   d  B
+## 8   e  C
+## 9   b  D
+## 10  c  E
+## 11  a  E
+## 12  b  A
+## 13  b  A
 ## 14  b  A
-## 15  b  A
-## 16  a  B
-## 17  d  E
-## 18  c  B
-## 19  b  D
-## 20  d  B
+## 15  b  B
+## 16  c  A
+## 17  d  A
+## 18  b  D
+## 19  a  C
+## 20  e  D
 \end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  create a table
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#create a table}
 \NormalTok{my_table_}\DecValTok{0}\NormalTok{ <-}\StringTok{ }\KeywordTok{table}\NormalTok{(fk_data}\OperatorTok{$}\NormalTok{x1, fk_data}\OperatorTok{$}\NormalTok{x2)}
 \KeywordTok{print.table}\NormalTok{(my_table_}\DecValTok{0}\NormalTok{)}
 \end{Highlighting}
@@ -233,16 +205,21 @@ computing language useful in experimental biology.
 \begin{verbatim}
 ##    
 ##     A B C D E
-##   a 1 1 1 0 1
-##   b 2 0 1 2 0
-##   c 0 2 1 1 0
-##   d 0 2 1 0 2
-##   e 0 1 0 1 0
+##   a 2 0 1 0 2
+##   b 3 1 1 3 0
+##   c 1 1 0 0 1
+##   d 1 1 0 0 0
+##   e 0 0 1 1 0
 \end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  if we want to have row and column totals
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#if we want to have row and column totals}
 \NormalTok{my_table_}\DecValTok{01}\NormalTok{<-}\StringTok{ }\KeywordTok{addmargins}\NormalTok{(my_table_}\DecValTok{0}\NormalTok{)}
 \KeywordTok{print.table}\NormalTok{(my_table_}\DecValTok{01}\NormalTok{)}
 \end{Highlighting}
@@ -251,88 +228,149 @@ computing language useful in experimental biology.
 \begin{verbatim}
 ##      
 ##        A  B  C  D  E Sum
-##   a    1  1  1  0  1   4
-##   b    2  0  1  2  0   5
-##   c    0  2  1  1  0   4
-##   d    0  2  1  0  2   5
-##   e    0  1  0  1  0   2
-##   Sum  3  6  4  4  3  20
+##   a    2  0  1  0  2   5
+##   b    3  1  1  3  0   8
+##   c    1  1  0  0  1   3
+##   d    1  1  0  0  0   2
+##   e    0  0  1  1  0   2
+##   Sum  7  3  3  4  3  20
 \end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  convert it to a dataframe
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{my_table_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{as.data.frame.matrix}\NormalTok{(my_table_}\DecValTok{0}\NormalTok{) }\CommentTok{#convert it to a dataframe}
-\CommentTok{#have a look at the table}
+\NormalTok{my_table_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{as.data.frame.matrix}\NormalTok{(my_table_}\DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  have a look at the table
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{print.data.frame}\NormalTok{(my_table_}\DecValTok{1}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 ##   A B C D E
-## a 1 1 1 0 1
-## b 2 0 1 2 0
-## c 0 2 1 1 0
-## d 0 2 1 0 2
-## e 0 1 0 1 0
+## a 2 0 1 0 2
+## b 3 1 1 3 0
+## c 1 1 0 0 1
+## d 1 1 0 0 0
+## e 0 0 1 1 0
 \end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  to have a table of proportions based on rows, and convert it to a
+  dataframe
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#to have a table of proportions based on rows}
 \NormalTok{my_table_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\KeywordTok{prop.table}\NormalTok{(my_table_}\DecValTok{0}\NormalTok{, }\DataTypeTok{margin =} \DecValTok{1}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{as.data.frame.matrix}\NormalTok{() }\CommentTok{#convert it to a dataframe}
-\CommentTok{#have a look at the table}
-\KeywordTok{print.data.frame}\NormalTok{(my_table_}\DecValTok{2}\NormalTok{, }\DataTypeTok{digits =} \DecValTok{2}\NormalTok{)}
+\StringTok{  }\KeywordTok{as.data.frame.matrix}\NormalTok{() }
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-##      A    B    C    D    E
-## a 0.25 0.25 0.25 0.00 0.25
-## b 0.40 0.00 0.20 0.40 0.00
-## c 0.00 0.50 0.25 0.25 0.00
-## d 0.00 0.40 0.20 0.00 0.40
-## e 0.00 0.50 0.00 0.50 0.00
-\end{verbatim}
+\begin{itemize}
+\tightlist
+\item
+  have a look at the table
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#to have a table of proportions based on columns}
-\NormalTok{my_table_}\DecValTok{3}\NormalTok{ <-}\StringTok{ }\KeywordTok{prop.table}\NormalTok{(my_table_}\DecValTok{0}\NormalTok{, }\DataTypeTok{margin=}\DecValTok{2}\NormalTok{)}\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{as.data.frame.matrix}\NormalTok{() }\CommentTok{#convert it to dataframe}
-\CommentTok{#have a look at the table}
 \KeywordTok{print.data.frame}\NormalTok{(my_table_}\DecValTok{2}\NormalTok{, }\DataTypeTok{digits =} \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 ##      A    B    C    D    E
-## a 0.25 0.25 0.25 0.00 0.25
-## b 0.40 0.00 0.20 0.40 0.00
-## c 0.00 0.50 0.25 0.25 0.00
-## d 0.00 0.40 0.20 0.00 0.40
-## e 0.00 0.50 0.00 0.50 0.00
+## a 0.40 0.00 0.20 0.00 0.40
+## b 0.38 0.12 0.12 0.38 0.00
+## c 0.33 0.33 0.00 0.00 0.33
+## d 0.50 0.50 0.00 0.00 0.00
+## e 0.00 0.00 0.50 0.50 0.00
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  to have a table of proportions based on columns
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my_table_}\DecValTok{3}\NormalTok{ <-}\StringTok{ }\KeywordTok{prop.table}\NormalTok{(my_table_}\DecValTok{0}\NormalTok{, }\DataTypeTok{margin=}\DecValTok{2}\NormalTok{)}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{as.data.frame.matrix}\NormalTok{() }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  have a look at the table
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print.data.frame}\NormalTok{(my_table_}\DecValTok{2}\NormalTok{, }\DataTypeTok{digits =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      A    B    C    D    E
+## a 0.40 0.00 0.20 0.00 0.40
+## b 0.38 0.12 0.12 0.38 0.00
+## c 0.33 0.33 0.00 0.00 0.33
+## d 0.50 0.50 0.00 0.00 0.00
+## e 0.00 0.00 0.50 0.50 0.00
 \end{verbatim}
 
 \hypertarget{sensitivity-and-specificity}{%
 \section{Sensitivity and
 Specificity}\label{sensitivity-and-specificity}}
 
-For the AIP test: \#\# Sensitivity: (AIP example) the probability of
-testing positive given that the subjevt has the disease
+For the AIP test:
 
-\(Sensitivity = p(test^+|disease^+)=82%\)
+\begin{itemize}
+\tightlist
+\item
+  Sensitivity: (AIP example) the probability of testing positive given
+  that the subjevt has the disease
+\end{itemize}
 
-\hypertarget{specificity-aip-example-the-probability-of-a-negative-test-given-that-the-subject-does-not-have-the-disease}{%
-\subsection{Specificity: (AIP example) the probability of a negative
-test given that the subject does not have the
-disease}\label{specificity-aip-example-the-probability-of-a-negative-test-given-that-the-subject-does-not-have-the-disease}}
+\(Sensitivity = p(test^+|disease^+)=0.82\)
 
-\(Specificity = p(test^-|disease^-)=96.3%\)
+\begin{itemize}
+\tightlist
+\item
+  Specificity: (AIP example) the probability of a negative test given
+  that the subject does not have the disease
+\end{itemize}
+
+\(Specificity = p(test^-|disease^-)=0.963\)
+
+\begin{itemize}
+\tightlist
+\item
+  here is a helpful youtube video:
+  \url{https://www.youtube.com/watch?v=9f5XgjWpzi0}
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# youtube vid: https://www.youtube.com/watch?v=9f5XgjWpzi0}
 \NormalTok{devtools}\OperatorTok{::}\KeywordTok{install_github}\NormalTok{(}\StringTok{"datacamp/RDocumentation"}\NormalTok{)}
 
 \NormalTok{data01 <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\StringTok{"B"}\NormalTok{, }\StringTok{"B"}\NormalTok{, }\StringTok{"B"}\NormalTok{))}
@@ -343,12 +381,14 @@ disease}\label{specificity-aip-example-the-probability-of-a-negative-test-given-
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{positive-predictive-value-ppv-the-probability-that-subjects-with-a-positive-screening-test-truly-have-the-disease}{%
-\subsection{Positive Predictive Value (PPV): the probability that
-subjects with a positive screening test truly have the
-disease}\label{positive-predictive-value-ppv-the-probability-that-subjects-with-a-positive-screening-test-truly-have-the-disease}}
+\hypertarget{positive-predictive-value-ppv}{%
+\section{Positive Predictive Value
+(PPV)}\label{positive-predictive-value-ppv}}
 
-\(p(disease^+|test^+) = \frac{TP}{TP+FP}=\frac{82}{82+36,996}=0.22%\)
+Positive Predictive Value is the probability that subjects with a
+positive screening test truly have the disease
+
+\(p(disease^+|test^+) = \frac{TP}{TP+FP}=\frac{82}{82+36,996}=0.22\)
 
 Even if you test positive, the probablity of you having AIP is still
 very low.
@@ -429,10 +469,12 @@ very low.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{negative-predictive-value-npv-the-probability-that-subjects-with-a-negative-screening-test-truly-do-not-have-the-disease.}{%
-\subsection{Negative Predictive Value (NPV): the probability that
-subjects with a negative screening test truly do not have the
-disease.}\label{negative-predictive-value-npv-the-probability-that-subjects-with-a-negative-screening-test-truly-do-not-have-the-disease.}}
+\hypertarget{negative-predictive-value-npv}{%
+\section{Negative Predictive Value
+(NPV)}\label{negative-predictive-value-npv}}
+
+Begative predictive value is the probability that subjects with a
+negative screening test truly do not have the disease.
 
 \(p(disease^-|test^-)\)
 
@@ -514,7 +556,6 @@ disease.}\label{negative-predictive-value-npv-the-probability-that-subjects-with
       \KeywordTok{stop}\NormalTok{(}\StringTok{"error in sensitivity calculation - allowed non-factors"}\NormalTok{)}
    \KeywordTok{options}\NormalTok{(}\DataTypeTok{show.error.messages =} \OtherTok{TRUE}\NormalTok{)}
    
-   
 \NormalTok{   ref03 <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"B"}\NormalTok{, }\StringTok{"B"}\NormalTok{, }\StringTok{"B"}\NormalTok{, }\StringTok{"B"}\NormalTok{), }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\StringTok{"B"}\NormalTok{))}
    
    \ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{isTRUE}\NormalTok{(}\KeywordTok{all.equal}\NormalTok{(}\KeywordTok{specificity}\NormalTok{(data03, ref03), }\FloatTok{.75}\NormalTok{))) }\KeywordTok{stop}\NormalTok{(}\StringTok{"error in specificity test 1"}\NormalTok{)}
@@ -532,20 +573,35 @@ disease.}\label{negative-predictive-value-npv-the-probability-that-subjects-with
 \end{Shaded}
 
 \hypertarget{prevalence}{%
-\subsection{Prevalence}\label{prevalence}}
+\section{Prevalence}\label{prevalence}}
 
 Prevalence is the fraction of individuals in a population who have a
-disease. \(prevalence = p(disease^+) = 50%\)
+disease. \(prevalence = p(disease^+) = 0.50\)
+
+\begin{itemize}
+\tightlist
+\item
+  Usage: prevalence(model, type = c(``pop'', ``bnp'', ``wnp''), i=NULL,
+  \ldots{})
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Usage: prevalence(model, type = c("pop", "bnp", "wnp"), i=NULL, ...)}
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{0934}\NormalTok{)}
 \NormalTok{Data.All.df}\FloatTok{.2008}\NormalTok{ <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{FSA =} \KeywordTok{sample}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"N8N"}\NormalTok{, }\StringTok{"N8R"}\NormalTok{, }\StringTok{"B3L"}\NormalTok{, }\StringTok{"P1H"}\NormalTok{), }\DecValTok{50}\NormalTok{, T),}
                                \DataTypeTok{Lyme =} \KeywordTok{sample}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{1}\NormalTok{, }\DecValTok{50}\NormalTok{, T),}
                                \DataTypeTok{stringsAsFactors =}\NormalTok{ F)}
+\end{Highlighting}
+\end{Shaded}
 
-\CommentTok{# First 10 observations.}
+\begin{itemize}
+\tightlist
+\item
+  First 10 observations:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{head}\NormalTok{(Data.All.df}\FloatTok{.2008}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -560,9 +616,15 @@ disease. \(prevalence = p(disease^+) = 50%\)
 ## 6 N8N    1
 \end{verbatim}
 
+\begin{itemize}
+\tightlist
+\item
+  Prevalence can be calculated as the number of positive diagnoses
+  divided by the total number of observations, i.e.~sum(Lyme)/n().
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#prevalence can be calculated as the number of positive diagnoses divided by the total number of observations, i.e. sum(Lyme)/n()}
 \NormalTok{Data.All.df}\FloatTok{.2008} \OperatorTok{%>%}
 \StringTok{  }\KeywordTok{group_by}\NormalTok{(FSA) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{Prevalence =} \KeywordTok{sum}\NormalTok{(Lyme)}\OperatorTok{/}\KeywordTok{n}\NormalTok{())}
@@ -580,34 +642,43 @@ disease. \(prevalence = p(disease^+) = 50%\)
 \end{verbatim}
 
 \hypertarget{frequentist-vs.bayesian-statistics}{%
-\subsection{Frequentist vs.~Bayesian
+\section{Frequentist vs.~Bayesian
 Statistics}\label{frequentist-vs.bayesian-statistics}}
 
-*Frequentist Statistics (aka classical statistics) focusses on
-likelihood. It avoids calculations involving prior odds, and therefore
-yields results that are prone to misinterpretation due to the base rate
-fallacy. Frequentist statistics is used heavily in biological research.
-It can still be useful and informative if you know exactly what to watch
-out for.
+\begin{itemize}
+\tightlist
+\item
+  Frequentist Statistics (aka classical statistics) focusses on
+  likelihood. It avoids calculations involving prior odds, and therefore
+  yields results that are prone to misinterpretation due to the base
+  rate fallacy. Frequentist statistics is used heavily in biological
+  research. It can still be useful and informative if you know exactly
+  what to watch out for.
+\end{itemize}
 
 \(p(data|hypothesis)\)
 
-\emph{Base Rate Fallacy: If presented with related base rate information
-(generic, general information) and specific information (information
-pertaining only to a certain case), the mind tends to ignore the forer
-and focus of the latter. }Iron Law of Frequentist Statistics: Never
-compute the probability of a hypothesis.
-
-*Bayesian Statistics explicitly accounts for prior odds. It focusses on
-computing posterior probabilities and requires prior information that is
-often hard to quantify. It is central to the modern machine learning and
-more advanced areas of quantitative biology. Experimental researchers in
-biology tend not to use Bayesian statistics.
+\begin{itemize}
+\item
+  Base Rate Fallacy: If presented with related base rate information
+  (generic, general information) and specific information (information
+  pertaining only to a certain case), the mind tends to ignore the forer
+  and focus of the latter.
+\item
+  Iron Law of Frequentist Statistics: Never compute the probability of a
+  hypothesis.
+\item
+  Bayesian Statistics explicitly accounts for prior odds. It focusses on
+  computing posterior probabilities and requires prior information that
+  is often hard to quantify. It is central to the modern machine
+  learning and more advanced areas of quantitative biology. Experimental
+  researchers in biology tend not to use Bayesian statistics.
+\end{itemize}
 
 \(p(hypothesis|data)\)
 
 \hypertarget{fishers-exact-test}{%
-\subsection{Fisher's Exact Test}\label{fishers-exact-test}}
+\section{Fisher's Exact Test}\label{fishers-exact-test}}
 
 Fisher's exact test is a statistical significane test used in the
 analysis of contingency tables and in place of chi square test in 2 by 2
@@ -623,14 +694,17 @@ is no association between the true order of pouring and the woman's
 guess, the alternative that there is a positive association (that the
 odds ratio is greater than 1).
 
+\begin{itemize}
+\tightlist
+\item
+  Syntax: fisher.test(x, y = NULL, workspace = 200000, hybrid = FALSE,
+  \#hybridPars = c(expect = 5, percent = 80, Emin = 1), \#control =
+  list(), or = 1, alternative = ``two.sided'', \#conf.int = TRUE,
+  conf.level = 0.95, \#simulate.p.value = FALSE, B = 2000)
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Usage: fisher.test(x, y = NULL, workspace = 200000, hybrid = FALSE,}
-            \CommentTok{#hybridPars = c(expect = 5, percent = 80, Emin = 1),}
-            \CommentTok{#control = list(), or = 1, alternative = "two.sided",}
-            \CommentTok{#conf.int = TRUE, conf.level = 0.95,}
-            \CommentTok{#simulate.p.value = FALSE, B = 2000)}
-
 \NormalTok{TeaTasting <-}
 \StringTok{  }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{), }
          \DataTypeTok{nrow=}\DecValTok{2}\NormalTok{, }
@@ -666,22 +740,30 @@ variable. (Biased coin example); when the probabilities sum up to 100\%.
 Example: A Biased Coin Biased coins are modeled using a Bernoulli
 distribution, which describes probabilities for a binary variable.
 
-\#Binomial Tests A binomial test compares the number of successes
-observed in a given number of trials with a hypothesized probability of
-success. The tes has the null hypothesis that the real probability of
-success is equal to some value denoted p.~and thr alternative hypothesis
-that is not equal to p.~The test can also be performed with a one-sided
-alternative hypothesis that the real probability of success is either
-greater than p or that it is less than p.
+\hypertarget{binomial-tests}{%
+\section{Binomial Tests}\label{binomial-tests}}
+
+A binomial test compares the number of successes observed in a given
+number of trials with a hypothesized probability of success. The tes has
+the null hypothesis that the real probability of success is equal to
+some value denoted p.~and thr alternative hypothesis that is not equal
+to p.~The test can also be performed with a one-sided alternative
+hypothesis that the real probability of success is either greater than p
+or that it is less than p.
 
 A one-tailed test with a significance level of 0.05 will be used. You
 roll the die 300 times and throw a total of 60 sixes. We cannot reject
 the null hypothesis that the probability of rolling a six is 1/6. This
 means that there is no evidence to prove that the die is not fair.
 
+\begin{itemize}
+\tightlist
+\item
+  Syntax: binom.test(nsuccesses, ntrials, p)
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#binom.test(nsuccesses, ntrials, p)}
 \KeywordTok{binom.test}\NormalTok{(}\DecValTok{60}\NormalTok{, }\DecValTok{300}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{6}\NormalTok{, }\DataTypeTok{alternative =} \StringTok{"greater"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -711,18 +793,15 @@ categorical variables.
 
 \(\chi^2=\Sigma \frac {(obersverd - expected)^2}{expected}\)
 
-Example A: Here, we get a chi-squared value of 5.5569. Since we get a
-p-value less than the significance level of 0.05, we reject the null
-hypothesis and conclude that the two variables are in fact dependent.
-
-Example B: Here, we get a high chi-squared value and a p-value of less
-than the 0.05 significance level. Therefore, we can reject the null
-hypothesis and conclude that carb and cyl have a significant
-relationship.
+\begin{itemize}
+\item
+  Syntax: chisp.test(data)
+\item
+  importing data, have a look at the table
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Syntax: chisp.test(data)}
 \NormalTok{data_frame<-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"https://goo.gl/j6lRXD"}\NormalTok{)}
 \KeywordTok{table}\NormalTok{(data_frame}\OperatorTok{$}\NormalTok{treatment, data_frame}\OperatorTok{$}\NormalTok{improvement)}
 \end{Highlighting}
@@ -735,9 +814,16 @@ relationship.
 ##   treated           35           15
 \end{verbatim}
 
+\begin{itemize}
+\tightlist
+\item
+  Example A: Here, we get a chi-squared value of 5.5569. Since we get a
+  p-value less than the significance level of 0.05, we reject the null
+  hypothesis and conclude that the two variables are in fact dependent.
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Example A:}
 \KeywordTok{chisq.test}\NormalTok{(data_frame}\OperatorTok{$}\NormalTok{treatment, data_frame}\OperatorTok{$}\NormalTok{improvement, }\DataTypeTok{correct=}\OtherTok{FALSE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -750,9 +836,17 @@ relationship.
 ## X-squared = 5.5569, df = 1, p-value = 0.01841
 \end{verbatim}
 
+\begin{itemize}
+\tightlist
+\item
+  Example B: Here, we get a high chi-squared value and a p-value of less
+  than the 0.05 significance level. Therefore, we can reject the null
+  hypothesis and conclude that carb and cyl have a significant
+  relationship.
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Example B}
 \KeywordTok{data}\NormalTok{(}\StringTok{"mtcars"}\NormalTok{)}
 \KeywordTok{table}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{carb, mtcars}\OperatorTok{$}\NormalTok{cyl)}
 \end{Highlighting}
@@ -789,7 +883,7 @@ relationship.
 \end{verbatim}
 
 \hypertarget{confidence-intervals-and-p-values}{%
-\subsection{Confidence Intervals and
+\section{Confidence Intervals and
 P-values}\label{confidence-intervals-and-p-values}}
 
 \emph{P-values quantify the probability of data being as or more extreme
@@ -798,20 +892,24 @@ than the data in hand, were the null hypothesis true.\\
 a null hypothesis if it lies outside of the confidence interval.
 
 \hypertarget{gaussiannormal-distributions}{%
-\subsection{Gaussian/Normal
+\section{Gaussian/Normal
 Distributions}\label{gaussiannormal-distributions}}
 
 Gaussian distribution (``the normal distribution'') is ubiquitous in
-statistics. This distribution is based on the mean μ and standard
-deviation σ of the data.
+statistics. This distribution is based on the mean \(\mu\) and standard
+deviation \(\sigma\) of the data.
 
-\(x~Normal(μ, σ^2)\)
+\(x \sim Normal(\mu, \sigma^2)\)
 
-*The Central Limit Theorem states that the population of all possible
-samples of size n from a populations= with mean μ and variance (σ
-squared) approaches a normal distribution when n (sample size)
-approaches infinity. The central limit theorem makes the normal
-distribution extremely relevant.
+\begin{itemize}
+\tightlist
+\item
+  The Central Limit Theorem states that the population of all possible
+  samples of size n from a populations= with mean \(\mu\) and variance
+  (\(\sigma\) squared) approaches a normal distribution when n (sample
+  size) approaches infinity. The central limit theorem makes the normal
+  distribution extremely relevant.
+\end{itemize}
 
 The parameters of a statistical model that has been fit to a large
 dataset will have lingering uncertainty, but this uncertainty will very
@@ -819,15 +917,21 @@ often be approximately normally distributed. This is why statisticians
 so often assume that experimental measurements follow normal
 distributions.
 
-θ = model parameter inferred from data \(θ∼Normal(μ,σ^2)\)
+\(\theta\) = model parameter inferred from data
+\(\theta \sim Normal(\mu,σ^2)\)
 
 The goal of statistical inference is to determine the mean and standard
-devistion of this distribution μ: best estimate of θ, denoted θ̂ σ:
-lingering uncertainty in θ: affects confidence interval
+devistion of this distribution \(\mu\): best estimate of \(\theta\),
+denoted \(\theta\) \(\sigma\): lingering uncertainty in \(\theta\):
+affects confidence interval
 
-Example: Here, this normal/gaussian distribution results shows that the
-percentage of students scoring an 84\% or higher in the college entrance
-exam is 21.5\%
+\begin{itemize}
+\tightlist
+\item
+  Example: Here, this normal/gaussian distribution results shows that
+  the percentage of students scoring an 84\% or higher in the college
+  entrance exam is 21.5\%
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -840,7 +944,7 @@ exam is 21.5\%
 \end{verbatim}
 
 \hypertarget{standard-error-of-the-mean-sem}{%
-\subsection{Standard Error of the Mean
+\section{Standard Error of the Mean
 (SEM)}\label{standard-error-of-the-mean-sem}}
 
 The standard error of the mean (SEM) is a statistical term that measures
@@ -867,9 +971,17 @@ of the mean (SEM)
 \StringTok{"}\NormalTok{)}
 
 \NormalTok{Data =}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\KeywordTok{textConnection}\NormalTok{(Input),}\DataTypeTok{header=}\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{itemize}
+\tightlist
+\item
+  calculate standard error manually
+\end{itemize}
 
-\CommentTok{##calculate standard error manually}
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{sd}\NormalTok{(Data}\OperatorTok{$}\NormalTok{Fish, }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{) }\OperatorTok{/}
 \StringTok{  }\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{length}\NormalTok{(Data}\OperatorTok{$}\NormalTok{Fish[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(Data}\OperatorTok{$}\NormalTok{Fish)]))}
 \end{Highlighting}
@@ -879,11 +991,11 @@ of the mean (SEM)
 ## [1] 10.69527
 \end{verbatim}
 
+*install psych package in console and use describe function from package
+for standard error. This function also works on while dataframes.
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#intall psych package in console}
-\CommentTok{#Use describe function from psych package for standard error}
-\CommentTok{#This function also works on whole dataframes}
 \KeywordTok{describe}\NormalTok{(Data}\OperatorTok{$}\NormalTok{Fish, }
          \DataTypeTok{type=}\DecValTok{2}\NormalTok{)}
 \end{Highlighting}
@@ -895,20 +1007,20 @@ of the mean (SEM)
 \end{verbatim}
 
 \hypertarget{z-tests}{%
-\subsection{Z-Tests}\label{z-tests}}
+\section{Z-Tests}\label{z-tests}}
 
 The z-test function is based on the standard normal distribution and
 creates confidence intervals and tests hypotheses for both one and two
 sample problems.
 
-\(z = \frac{x-μ}{σ}\)
+\(z = \frac{x-\mu}{\sigma}\)
 
 \emph{mu = a single number representing the value of the mean or
 difference in means specified by the null hypothesis }sigma.x = a single
 number representing the population standard deviation for x *sigma.y = a
-singlw number representing the population standard deviation for y
+single number representing the population standard deviation for y
 
-*Syntax: z.test(x, y=NULL, alternative = ``two-sided'', mu = 0,
+*Syntax: z.test(x, y=NULL, alternative = ``two-sided'', mu = \(\theta\),
 sigma.x=NULL, sigma.y=NULL, conf.level=0.95)
 
 An R function called z.test() would be great for doing the kind of
@@ -922,8 +1034,8 @@ Example: \emph{ID.data \textless{}- c(100,101,104, 109, 125, 116, 105,
 probability = 0.042 *two-tailed probability = 0.084
 
 Begin by creating the function name and its arguments:
-\emph{z.test=function(x, mu, popvar)\{ }The first argument is the vector
-of data, second is the population mean, third is the population
+\emph{z.test=function(x, \(\mu\), popvar)\{ }The first argument is the
+vector of data, second is the population mean, third is the population
 variance. Left curly bracket signifies that the remainder of the code is
 what happens inside the function. Next, create a vector that will hold
 the one-tailed probability of the z-score you will calculate:
@@ -949,18 +1061,18 @@ mean of two independent samples. A paired t-test is used to compare the
 means between two related groups of samples. The formula of a t-test
 depends on the mean and standard deviation of the data being compared.
 
-*One-Sample t-test: based on the theoretical mean(μ), the set of values
-with size n, the mean m, and the standard deviation σ. The degrees of
-freedom is found with df=n-1.
+*One-Sample t-test: based on the theoretical mean(\mu), the set of
+values with size n, the mean m, and the standard deviation \(\sigma\).
+The degrees of freedom is found with (df=n-1).
 
-\(t = \frac{m-μ}{σ/\sqrt{n}}\)
+\(t = \frac{m-\mu}{\frac{\sigma}{\sqrt{n}}}\)
 
 *Independent two-sample t-test Let A and B represent the two groups to
 compare. Let mA and mB represent the means of groups A and B,
 respectively. Let nA and nB represent the sizes of group A and B
 respectively.
 
-\(t = \frac{mA - mB}{\sqrt{\frac{S^2}{nA} + \frac{S^2}{nB}}\)
+\(t = \frac{mA - mB}{\sqrt{\frac{S^2}{nA} + \frac{S^2}{nB}}}\)
 
 S\^{}2 is an estimator of the common variance of the two samples.
 
@@ -968,9 +1080,15 @@ S\^{}2 is an estimator of the common variance of the two samples.
 test which is used to test the hypothesis that the two populations have
 unequal means.
 
+\begin{itemize}
+\tightlist
+\item
+  independent two-sample t-test, where y is a numeric and x is a nibary
+  factor
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# independent 2-sample t-test, where y is numeric and x is a binary factor}
 \NormalTok{x=}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{)}
 \NormalTok{y=}\KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{)}
 \KeywordTok{t.test}\NormalTok{(y,x)  }\CommentTok{#Welch's t-test}
@@ -991,10 +1109,15 @@ unequal means.
 ##  0.018022788 -0.007067778
 \end{verbatim}
 
+\begin{itemize}
+\tightlist
+\item
+  one sample t-test, with a null hypothesis (Ho) mu=3
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# one sample t-test}
-\KeywordTok{t.test}\NormalTok{(y,}\DataTypeTok{mu=}\DecValTok{3}\NormalTok{) }\CommentTok{# Ho(null hypothesis): mu=3}
+\KeywordTok{t.test}\NormalTok{(y,}\DataTypeTok{mu=}\DecValTok{3}\NormalTok{) }
 \end{Highlighting}
 \end{Shaded}
 
@@ -1062,9 +1185,14 @@ distribution. They are used to verify that data used in a t-test is
 actually normally distributed. QQ plots are not useful on small
 datasets.
 
+\begin{itemize}
+\tightlist
+\item
+  in console: install.packages(``car'')
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#in console: install.packages("car")}
 \NormalTok{my_data <-}\StringTok{ }\NormalTok{ToothGrowth}
 
 \KeywordTok{qqnorm}\NormalTok{(my_data}\OperatorTok{$}\NormalTok{len, }\DataTypeTok{pch =} \DecValTok{1}\NormalTok{, }\DataTypeTok{frame =} \OtherTok{FALSE}\NormalTok{)}
@@ -1072,7 +1200,7 @@ datasets.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-15-1.pdf}
+\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-31-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1080,7 +1208,7 @@ datasets.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-15-2.pdf}
+\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-31-2.pdf}
 
 \begin{verbatim}
 ## [1] 23  1
@@ -1124,15 +1252,21 @@ linear model explains.
 
 \(R^2 = \frac{variance explained by model}{total variance}\)
 
-\begin{verbatim}
-*0% or and r-squared close to 0.000 represents a model that does not explain any of the variation in the resprinse (dependent) variable around its mean. The mean of the dependent variable predicts the dependent variable as well as the regression model. 
-*100% or an r-squared of 1.00 represents a model that explains all of the variation in the response variable around its mean.
-\end{verbatim}
-
-*Example: The coefficient of determination (r squared) of the simple
-linear regression model for the data set below is 0.81146. This means
-with an r-squared of 0.81146, then approximately 81.15\% of the observed
-variation can be explained by the model's inputs.
+\begin{itemize}
+\item
+  0\% or and r-squared close to 0.000 represents a model that does not
+  explain any of the variation in the resprinse (dependent) variable
+  around its mean. The mean of the dependent variable predicts the
+  dependent variable as well as the regression model.
+\item
+  100\% or an r-squared of 1.00 represents a model that explains all of
+  the variation in the response variable around its mean.
+\item
+  Example: The coefficient of determination (r squared) of the simple
+  linear regression model for the data set below is 0.81146. This means
+  with an r-squared of 0.81146, then approximately 81.15\% of the
+  observed variation can be explained by the model's inputs.
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1174,7 +1308,7 @@ variation can be explained by the model's inputs.
 \end{verbatim}
 
 \hypertarget{power-analysis}{%
-\subsection{Power Analysis}\label{power-analysis}}
+\section{Power Analysis}\label{power-analysis}}
 
 The power of a statistical test is the probability that the test will
 reject a false null hypothesis. Power analysis allows us to determine
@@ -1183,11 +1317,17 @@ given degree of confidence. It also allows us to determine the
 probability of detecting an effect of a given size with a given level of
 confidence, under sample size constraints.
 
-*Example: The function tells us we should flipthe coin 22.55126 times,
+*Example: The function tells us we should flip the coin 22.55126 times,
 which would round up to 23. Always round sample size estimates up in
 power analyses. If we are correct that our coin lands heads 75\% of the
 time, we need to flip at least 23 times to have an 80\% chance of
 correctly rejecting the null hypothesis at the 0.05 significance level.
+
+\begin{itemize}
+\tightlist
+\item
+  Syntax:
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1200,7 +1340,11 @@ correctly rejecting the null hypothesis at the 0.05 significance level.
 \CommentTok{#pwr.r.test -- correlation}
 \CommentTok{#pwr.t.test -- t-tests (one sample, 2 sample, paired)}
 \CommentTok{#pwr.t2n.test   -- t-test (two samples with unequal n)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{pwr.p.test}\NormalTok{(}\DataTypeTok{h=}\KeywordTok{ES.h}\NormalTok{(}\DataTypeTok{p1=}\FloatTok{0.75}\NormalTok{, }\DataTypeTok{p2=}\FloatTok{0.50}\NormalTok{), }
            \DataTypeTok{sig.level =} \FloatTok{0.05}\NormalTok{,}
            \DataTypeTok{power =} \FloatTok{0.80}\NormalTok{, }
@@ -1229,7 +1373,7 @@ correctly rejecting the null hypothesis at the 0.05 significance level.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-17-1.pdf}
+\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-34-1.pdf}
 Example: What is the power of our test if we flip the coin 40 times and
 lower our Type I error tolerance to 0.01? Notice we leave out the power
 argument, add n = 40, and change sig.level = 0.01:
@@ -1278,7 +1422,7 @@ Notice how our power estimate drops below 80\% when we do this.
 \end{verbatim}
 
 \hypertarget{anova-tests-analysis-of-variance}{%
-\subsection{ANOVA tests (Analysis of
+\section{ANOVA tests (Analysis of
 Variance)}\label{anova-tests-analysis-of-variance}}
 
 ANOVA is a statistical test for estimating how a quantitative dependent
@@ -1318,9 +1462,14 @@ with the mutate verb.
 ## [1] "1" "2" "3"
 \end{verbatim}
 
+\begin{itemize}
+\tightlist
+\item
+  Compute the mean and the standard deviation
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Compute the mean and the standard deviation}
 \NormalTok{df }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{group_by}\NormalTok{(poison)}\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{summarise}\NormalTok{(}
@@ -1340,9 +1489,14 @@ with the mutate verb.
 ## 3 3                16     0.276  0.0623
 \end{verbatim}
 
+\begin{itemize}
+\tightlist
+\item
+  Graphically check if there is a difference between the distribution.
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Graphically check if there is a difference between the distribution. }
 \KeywordTok{ggplot}\NormalTok{(df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ poison, }\DataTypeTok{y =}\NormalTok{ time, }\DataTypeTok{fill =}\NormalTok{ poison)) }\OperatorTok{+}
 \StringTok{    }\KeywordTok{geom_boxplot}\NormalTok{() }\OperatorTok{+}
 \StringTok{    }\KeywordTok{geom_jitter}\NormalTok{(}\DataTypeTok{shape =} \DecValTok{15}\NormalTok{,}
@@ -1352,12 +1506,12 @@ with the mutate verb.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-38-1.pdf}
+* Run the one-way ANOVA test with the command aov. * Syntax:
+aov(formula, data)
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Run the one-way ANOVA test with the command aov. }
-\CommentTok{#basic syntax for ANOVA test: aov(formula, data)}
 \NormalTok{anova_one_way <-}\StringTok{ }\KeywordTok{aov}\NormalTok{(time}\OperatorTok{~}\NormalTok{poison, }\DataTypeTok{data =}\NormalTok{ df)}
 \KeywordTok{summary}\NormalTok{(anova_one_way)}
 \end{Highlighting}
@@ -1371,9 +1525,14 @@ with the mutate verb.
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
 
+\begin{itemize}
+\tightlist
+\item
+  Tukeys Test:
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Tukeys Test: }
 \KeywordTok{TukeyHSD}\NormalTok{(anova_one_way)}
 \end{Highlighting}
 \end{Shaded}
@@ -1391,9 +1550,10 @@ with the mutate verb.
 ## 3-2 -0.268125 -0.4475046 -0.08874536 0.0020924
 \end{verbatim}
 
+*ANOVA two-way test
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#ANOVA two-way test}
 \NormalTok{anova_two_way <-}\StringTok{ }\KeywordTok{aov}\NormalTok{(time}\OperatorTok{~}\NormalTok{poison }\OperatorTok{+}\StringTok{ }\NormalTok{treat, }\DataTypeTok{data =}\NormalTok{ df)}
 \KeywordTok{summary}\NormalTok{(anova_two_way)}
 \end{Highlighting}
@@ -1409,42 +1569,85 @@ with the mutate verb.
 \end{verbatim}
 
 \hypertarget{nonlinear-regression}{%
-\subsection{Nonlinear Regression}\label{nonlinear-regression}}
+\section{Nonlinear Regression}\label{nonlinear-regression}}
+
+\begin{itemize}
+\tightlist
+\item
+  Load the data
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{theme_set}\NormalTok{(}\KeywordTok{theme_classic}\NormalTok{())}
-\CommentTok{# Load the data}
 \KeywordTok{data}\NormalTok{(}\StringTok{"Boston"}\NormalTok{, }\DataTypeTok{package =} \StringTok{"MASS"}\NormalTok{)}
-\CommentTok{# Split the data into training and test set}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Split the data into training and test set
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
 \NormalTok{training.samples <-}\StringTok{ }\NormalTok{Boston}\OperatorTok{$}\NormalTok{medv }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{createDataPartition}\NormalTok{(}\DataTypeTok{p =} \FloatTok{0.8}\NormalTok{, }\DataTypeTok{list =} \OtherTok{FALSE}\NormalTok{)}
 \NormalTok{train.data  <-}\StringTok{ }\NormalTok{Boston[training.samples, ]}
 \NormalTok{test.data <-}\StringTok{ }\NormalTok{Boston[}\OperatorTok{-}\NormalTok{training.samples, ]}
+\end{Highlighting}
+\end{Shaded}
 
-\CommentTok{#First, visualize the scatter plot of the medv vs lstat variables:}
+\begin{itemize}
+\tightlist
+\item
+  First, visualize the scatter plot of the medv vs lstat variables:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{ggplot}\NormalTok{(train.data, }\KeywordTok{aes}\NormalTok{(lstat, medv) ) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
 \StringTok{  }\KeywordTok{stat_smooth}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-20-1.pdf}
+\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-44-1.pdf}
 
 The standard linear regression model equation can be writted as:
 
 \(medv = b0+b1*lstat\)
 
-Compute the linear regression model:
+Compute the linear regression model: * Build the model
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Build the model}
 \NormalTok{model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(medv }\OperatorTok{~}\StringTok{ }\NormalTok{lstat, }\DataTypeTok{data =}\NormalTok{ train.data)}
-\CommentTok{# Make predictions}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Make predictions
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{predictions <-}\StringTok{ }\NormalTok{model }\OperatorTok{%>%}\StringTok{ }\KeywordTok{predict}\NormalTok{(test.data)}
-\CommentTok{# Model performance}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Model performance
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{data.frame}\NormalTok{(}
   \DataTypeTok{RMSE =} \KeywordTok{RMSE}\NormalTok{(predictions, test.data}\OperatorTok{$}\NormalTok{medv),}
   \DataTypeTok{R2 =} \KeywordTok{R2}\NormalTok{(predictions, test.data}\OperatorTok{$}\NormalTok{medv)}
@@ -1465,10 +1668,10 @@ Compute the linear regression model:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-21-1.pdf}
+\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-47-1.pdf}
 
 \hypertarget{polynomial-regression}{%
-\subsection{Polynomial Regression}\label{polynomial-regression}}
+\section{Polynomial Regression}\label{polynomial-regression}}
 
 Polynomial regression: adds polynomial or quadratic terms to the
 regression equations
@@ -1541,13 +1744,38 @@ regression equations
 ## F-statistic: 144.6 on 6 and 400 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
+\begin{itemize}
+\tightlist
+\item
+  Build the model
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Build the model}
 \NormalTok{model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(medv }\OperatorTok{~}\StringTok{ }\KeywordTok{poly}\NormalTok{(lstat, }\DecValTok{5}\NormalTok{, }\DataTypeTok{raw =} \OtherTok{TRUE}\NormalTok{), }\DataTypeTok{data =}\NormalTok{ train.data)}
-\CommentTok{# Make predictions}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Make predictions
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{predictions <-}\StringTok{ }\NormalTok{model }\OperatorTok{%>%}\StringTok{ }\KeywordTok{predict}\NormalTok{(test.data)}
-\CommentTok{# Model performance}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Model performance
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{data.frame}\NormalTok{(}
   \DataTypeTok{RMSE =} \KeywordTok{RMSE}\NormalTok{(predictions, test.data}\OperatorTok{$}\NormalTok{medv),}
   \DataTypeTok{R2 =} \KeywordTok{R2}\NormalTok{(predictions, test.data}\OperatorTok{$}\NormalTok{medv)}
@@ -1568,7 +1796,7 @@ regression equations
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-22-1.pdf}
+\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-51-1.pdf}
 
 \hypertarget{log-transformation}{%
 \subsection{Log Transformation}\label{log-transformation}}
@@ -1576,13 +1804,38 @@ regression equations
 Log transformation: when you have a non-linear relationship, you can try
 a logarithmic transormation of the predictor variables:
 
+\begin{itemize}
+\tightlist
+\item
+  Build the model
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Build the model}
 \NormalTok{model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(medv }\OperatorTok{~}\StringTok{ }\KeywordTok{log}\NormalTok{(lstat), }\DataTypeTok{data =}\NormalTok{ train.data)}
-\CommentTok{# Make predictions}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Make predictions
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{predictions <-}\StringTok{ }\NormalTok{model }\OperatorTok{%>%}\StringTok{ }\KeywordTok{predict}\NormalTok{(test.data)}
-\CommentTok{# Model performance}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Model performance
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{data.frame}\NormalTok{(}
   \DataTypeTok{RMSE =} \KeywordTok{RMSE}\NormalTok{(predictions, test.data}\OperatorTok{$}\NormalTok{medv),}
   \DataTypeTok{R2 =} \KeywordTok{R2}\NormalTok{(predictions, test.data}\OperatorTok{$}\NormalTok{medv)}
@@ -1603,6 +1856,6 @@ a logarithmic transormation of the predictor variables:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-23-1.pdf}
+\includegraphics{PracticalStatisticsR_files/figure-latex/unnamed-chunk-54-1.pdf}
 
 \end{document}
