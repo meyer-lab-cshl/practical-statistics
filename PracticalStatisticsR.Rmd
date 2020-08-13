@@ -346,8 +346,6 @@ $z = \frac{x-\mu}{\sigma}$
 
 An R function called z.test() would be great for doing the kind of testing in which you use z-scores in the hypothesis test. It could look like this:
 
-* Syntax: z.test(x, y=NULL, alternative = "two-sided", mu = $\theta$, sigma.x=NULL, sigma.y=NULL, conf.level=0.95)
-
 * $\mu$ = a single number representing the value of the mean or difference in means  specified by the null hypothesis
 * $\sigma_x$ = a single number representing the population standard deviation for x
 * $\sigma_y$ = a single number representing the population standard deviation for y
@@ -355,12 +353,12 @@ An R function called z.test() would be great for doing the kind of testing in wh
 One problem: that function does not exist in base R.  Although you can find one in other packages, it's easy enough to create one and learn a bit about R programming in the process. The function would work like this:
 
 Example:
-* IQ.data <- c(100,101,104, 109, 125, 116, 105, 108, 110)
-* z.test(IQ.data, 100, 15)
-* z=1.733
+  * IQ.data <- c(100,101,104, 109, 125, 116, 105, 108, 110)
+  * z.test(IQ.data, 100, 15)
+  * z=1.733
 Results:
-* one-tailed probability = 0.042
-* two-tailed probability = 0.084
+  * one-tailed probability = 0.042
+  * two-tailed probability = 0.084
 
 Begin by creating the function name and its arguments:
 * z.test=function(x, $\mu$, popvar){
