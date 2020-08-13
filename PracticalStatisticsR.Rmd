@@ -26,10 +26,9 @@ This course will be reviewing some practical statistics work in the R computing 
 knitr::opts_chunk$set(echo = TRUE, message=FALSE)
 ```
 
-
 Below are the necessary libraries for the statistical work we will be doing. 
 
-```{r message = FALSE}
+```{r message = FALSE, warning=FALSE}
 #Loading libraries
 library(caret)
 library(tidyverse)
@@ -38,57 +37,73 @@ library(RDocumentation)
 library(psych)
 library(car)
 library(pwr)
-library(tinytex)
 ```
 
 # Contingecy Tables
 
-```{rmessage = FALSE}
-rm(list=ls())
-#create a fake data set
+* create a fake data set
+```{r message = FALSE}
 fk_data <- data.frame(x1 = sample(letters[1:5], 20, replace=TRUE), 
                       x2 = sample(LETTERS[1:5], 20, replace = TRUE))
-#have a look at the data set
-print.data.frame(fk_data)
+```
+* have a look at the data set
+```{r message = FALSE}
 
-#create a table
+print.data.frame(fk_data)
+```
+* create a table
+```{r}
 my_table_0 <- table(fk_data$x1, fk_data$x2)
 print.table(my_table_0)
-
-#if we want to have row and column totals
+```
+* if we want to have row and column totals
+```{r}
 my_table_01<- addmargins(my_table_0)
 print.table(my_table_01)
-
-my_table_1 <- as.data.frame.matrix(my_table_0) #convert it to a dataframe
-#have a look at the table
+```
+* convert it to a dataframe
+```{r}
+my_table_1 <- as.data.frame.matrix(my_table_0)
+```
+* have a look at the table
+```{r}
 print.data.frame(my_table_1)
-
-#to have a table of proportions based on rows
+```
+* to have a table of proportions based on rows, and convert it to a dataframe
+```{r}
 my_table_2 <- prop.table(my_table_0, margin = 1) %>%
-  as.data.frame.matrix() #convert it to a dataframe
-#have a look at the table
+  as.data.frame.matrix() 
+```
+* have a look at the table
+```{r}
 print.data.frame(my_table_2, digits = 2)
-
-#to have a table of proportions based on columns
+```
+* to have a table of proportions based on columns
+```{r}
 my_table_3 <- prop.table(my_table_0, margin=2)%>%
-  as.data.frame.matrix() #convert it to dataframe
-#have a look at the table
+  as.data.frame.matrix() 
+```
+* have a look at the table
+```{r}
 print.data.frame(my_table_2, digits = 2)
 ```
 
 # Sensitivity and Specificity
 
-For the AIP test:
-  * Sensitivity: (AIP example) the probability of testing positive given that the subjevt has the disease
+For the AIP test: AIP (Acute Intermediate Porphyria) is a rare metabolic disorder.   
 
-$Sensitivity = p(test^+|disease^+)=82%$
+  * Sensitivity: (AIP example) the probability of testing positive given that the subject has the disease
+
+$Sensitivity = p(test^+|disease^+)=0.82$
+
+$p(test^+|disease^+) = \frac{TP}{TP+FN}=\frac{82}{82+18}=0.82$
 
   * Specificity: (AIP example) the probability of a negative test given that the subject does not have the disease
 
-$Specificity = p(test^-|disease^-)=96.3%$
+$Specificity = p(test^-|disease^-)=0.963$
 
+* here is a helpful youtube video: https://www.youtube.com/watch?v=9f5XgjWpzi0
 ```{r message = FALSE}
-# youtube vid: https://www.youtube.com/watch?v=9f5XgjWpzi0
 devtools::install_github("datacamp/RDocumentation")
 
 data01 <- factor(c("A", "B", "B", "B"))
@@ -101,9 +116,15 @@ ref02 <- factor(c("B", "A", "B", "B"))
 # Positive Predictive Value (PPV)
 Positive Predictive Value is the probability that subjects with a positive screening test truly have the disease 
 
-$p(disease^+|test^+) = \frac{TP}{TP+FP}=\frac{82}{82+36,996}=0.22%$
+  * TP: True Positive
+  * FP: False Positive
+  * TN: True Negative
+  * FN: False Negative
 
-Even if you test positive, the probablity of you having AIP is still very low. 
+$p(disease^+|test^+) = \frac{TP}{TP+FP}=\frac{82}{82+36,996}=0.0022$
+
+* Even if you test positive, the probablity of you having AIP is still very low. 
+* PPV is often far less than sensitivity in screening tests for rare diseases. 
 
 ```{r message = FALSE}
 table(data01, ref01)
@@ -123,7 +144,7 @@ ref04 <- factor(c("B", "A", "B", "B"))
 
 # Negative Predictive Value (NPV)
 
-Begative predictive value is the probability that subjects with a negative screening test truly do not have the disease.  
+Negative predictive value is the probability that subjects with a negative screening test truly do not have the disease.  
 
 $p(disease^-|test^-)$
 
@@ -148,7 +169,6 @@ if(!is.na(sensitivity(data02, ref03, "A"))) stop("error in sensitivity test3")
       stop("error in sensitivity calculation - allowed non-factors")
    options(show.error.messages = TRUE)
    
-   
    ref03 <- factor(c("B", "B", "B", "B"), levels = c("A", "B"))
    
    if(!isTRUE(all.equal(specificity(data03, ref03), .75))) stop("error in specificity test 1")
@@ -162,38 +182,42 @@ if(!is.na(sensitivity(data02, ref03, "A"))) stop("error in sensitivity test3")
    if(grep("Error", test1) != 1)
       stop("error in specificity calculation - allowed non-factors")
    options(show.error.messages = TRUE)
-
 ```
 
 # Prevalence
 Prevalence is the fraction of individuals in a population who have a disease. 
-$prevalence = p(disease^+) = 50%$
+* If a subject's sibling has AIP, there is a 50% chance that they do too. 
+$prevalence = p(disease^+) = 0.50$
 
+*  Usage: prevalence(model, type = c("pop", "bnp", "wnp"), i=NULL, ...)
+    
 ```{r message = FALSE}
-#Usage: prevalence(model, type = c("pop", "bnp", "wnp"), i=NULL, ...)
 set.seed(0934)
 Data.All.df.2008 <- data.frame(FSA = sample(c("N8N", "N8R", "B3L", "P1H"), 50, T),
                                Lyme = sample(0:1, 50, T),
                                stringsAsFactors = F)
-
-# First 10 observations.
+```
+* First 10 observations:
+```{r}
 head(Data.All.df.2008)
-#prevalence can be calculated as the number of positive diagnoses divided by the total number of observations, i.e. sum(Lyme)/n()
+```
+* Prevalence can be calculated as the number of positive diagnoses divided by the total number of observations, i.e. sum(Lyme)/n(). 
+```{r}
 Data.All.df.2008 %>%
   group_by(FSA) %>%
   summarise(Prevalence = sum(Lyme)/n())
-
 ```
 
 # Frequentist vs. Bayesian Statistics
-*Frequentist Statistics (aka classical statistics) focusses on likelihood.  It avoids calculations involving prior odds, and therefore yields results that are prone to misinterpretation due to the base rate fallacy.  Frequentist statistics is used heavily in biological research.  It can still be useful and informative if you know exactly what to watch out for. 
+
+* Frequentist Statistics (aka classical statistics) focusses on likelihood.  It avoids calculations involving prior odds, and therefore yields results that are prone to misinterpretation due to the base rate fallacy.  Frequentist statistics is used heavily in biological research.  It can still be useful and informative if you know exactly what to watch out for. 
 
 $p(data|hypothesis)$
+    
+  - Base Rate Fallacy: If presented with related base rate information (generic, general information) and specific information (information pertaining only to a certain case), the mind tends to ignore the forer and focus of the latter. 
+  - Iron Law of Frequentist Statistics: Never compute the probability of a hypothesis.
 
-  *Base Rate Fallacy: If presented with related base rate information (generic, general information) and specific information (information pertaining only to a certain case), the mind tends to ignore the forer and focus of the latter. 
-  *Iron Law of Frequentist Statistics: Never compute the probability of a hypothesis.
-
-*Bayesian Statistics explicitly accounts for prior odds. It focusses on computing posterior probabilities and requires prior information that is often hard to quantify. 
+* Bayesian Statistics explicitly accounts for prior odds. It focusses on computing posterior probabilities and requires prior information that is often hard to quantify. 
 It is central to the modern machine learning and more advanced areas of quantitative biology. Experimental researchers in biology tend not to use Bayesian statistics. 
 
 $p(hypothesis|data)$
@@ -204,13 +228,13 @@ Fisher's exact test is a statistical significane test used in the analysis of co
 
 Example: A British woman claimed to be able to distinguish whether milk or tea was added to the cup first.  To test, she was given 8 cups of tea, in four of which milk was added first.  The null hypothesis is that there is no association between the true order of pouring and the woman's guess, the alternative that there is a positive association (that the odds ratio is greater than 1).
 
-```{r message = FALSE}
-#Usage: fisher.test(x, y = NULL, workspace = 200000, hybrid = FALSE,
+  * Syntax: fisher.test(x, y = NULL, workspace = 200000, hybrid = FALSE,
             #hybridPars = c(expect = 5, percent = 80, Emin = 1),
             #control = list(), or = 1, alternative = "two.sided",
             #conf.int = TRUE, conf.level = 0.95,
             #simulate.p.value = FALSE, B = 2000)
 
+```{r message = FALSE}
 TeaTasting <-
   matrix(c(3,1,1,3), 
          nrow=2, 
@@ -230,8 +254,8 @@ A binomial test compares the number of successes observed in a given number of t
 
 A one-tailed test with a significance level of 0.05 will be used.  You roll the die 300 times and throw a total of 60 sixes.  We cannot reject the null hypothesis that the probability of rolling a six is 1/6.  This means that there is no evidence to prove that the die is not fair.  
 
+  * Syntax: binom.test(nsuccesses, ntrials, p)
 ```{r message = FALSE}
-#binom.test(nsuccesses, ntrials, p)
 binom.test(60, 300, 1/6, alternative = "greater")
 ```
 
@@ -240,19 +264,20 @@ Chi Square tests are used to determine if two categorical varibales have a signi
 
 $\chi^2=\Sigma \frac {(obersverd - expected)^2}{expected}$
 
-Example A: Here, we get a chi-squared value of 5.5569.  Since we get a p-value less than the significance level of 0.05, we reject the null hypothesis and conclude that the two variables are in fact dependent.  
 
-Example B: Here, we get a high chi-squared value and a p-value of less than the 0.05 significance level.  Therefore, we can reject the null hypothesis and conclude that carb and cyl have a significant relationship.  
-
+  * Syntax: chisp.test(data)
+  
+* importing data, have a look at the table
 ```{r message = FALSE}
-#Syntax: chisp.test(data)
 data_frame<- read.csv("https://goo.gl/j6lRXD")
 table(data_frame$treatment, data_frame$improvement)
-
-#Example A:
+```
+* Example A: Here, we get a chi-squared value of 5.5569.  Since we get a p-value less than the significance level of 0.05, we reject the null hypothesis and conclude that the two variables are in fact dependent.  
+```{r}
 chisq.test(data_frame$treatment, data_frame$improvement, correct=FALSE)
-
-#Example B
+```
+* Example B: Here, we get a high chi-squared value and a p-value of less than the 0.05 significance level.  Therefore, we can reject the null hypothesis and conclude that carb and cyl have a significant relationship.  
+```{r}
 data("mtcars")
 table(mtcars$carb, mtcars$cyl)
 chisq.test(mtcars$carb, mtcars$cyl)
@@ -263,23 +288,22 @@ chisq.test(mtcars$carb, mtcars$cyl)
 *Confidence Intervals are more informative than p-values. We can reject a null hypothesis if it lies outside of the confidence interval. 
 
 # Gaussian/Normal Distributions 
-Gaussian distribution ("the normal distribution") is ubiquitous in statistics. This distribution is based on the mean μ and standard deviation σ of the data.  
+Gaussian distribution ("the normal distribution") is ubiquitous in statistics. This distribution is based on the mean $\mu$ and standard deviation $\sigma$ of the data.  
 
-$x~Normal(μ, σ^2)$
+$x \sim Normal(\mu, \sigma^2)$
 
-*The Central Limit Theorem states that the population of all possible samples of size n from a populations= with mean μ and variance (σ squared) approaches a normal distribution when n (sample size) approaches infinity.  The central limit theorem makes the normal distribution extremely relevant. 
+* The Central Limit Theorem states that the population of all possible samples of size n from a populations= with mean $\mu$ and variance ($\sigma$ squared) approaches a normal distribution when n (sample size) approaches infinity.  The central limit theorem makes the normal distribution extremely relevant. 
 
 The parameters of a statistical model that has been fit to a large dataset will have lingering uncertainty, but this uncertainty will very often be approximately normally distributed.  This is why statisticians so often assume that experimental measurements follow normal distributions.  
 
-θ = model parameter inferred from data 
-$θ∼Normal(μ,σ^2)$
+$\theta$ = model parameter inferred from data 
+$\theta \sim Normal(\mu,σ^2)$
 
 The goal of statistical inference is to determine the mean and standard devistion of this distribution
-μ: best estimate of  θ, denoted θ̂
-σ: lingering uncertainty in θ: affects confidence interval 
+$\mu$: best estimate of  $\theta$, denoted $\theta$
+$\sigma$: lingering uncertainty in $\theta$: affects confidence interval 
 
-Example: Here, this normal/gaussian distribution results shows that the percentage of students scoring an 84% or higher in the college entrance exam is 21.5%
-
+* Example: Here, this normal/gaussian distribution results shows that the percentage of students scoring an 84% or higher in the college entrance exam is 21.5%
 ```{r message = FALSE} 
 pnorm(84, mean = 72, sd = 15.2, lower.tail = FALSE)
 ```
@@ -304,31 +328,28 @@ Stream                     Fish
 ")
 
 Data = read.table(textConnection(Input),header=TRUE)
-
-
-##calculate standard error manually
+```
+* calculate standard error manually
+```{r}
 sd(Data$Fish, na.rm=TRUE) /
   sqrt(length(Data$Fish[!is.na(Data$Fish)]))
-
-#intall psych package in console
-#Use describe function from psych package for standard error
-#This function also works on whole dataframes
+```
+*install psych package in console and use describe function from package for standard error.  This function also works on while dataframes.
+```{r}
 describe(Data$Fish, 
          type=2)
-
 ```
-
 
 # Z-Tests 
 The z-test function is based on the standard normal distribution and creates confidence intervals and tests hypotheses for both one and two sample problems. 
 
-$z = \frac{x-μ}{σ}$
+$z = \frac{x-\mu}{\sigma}$
 
   *mu = a single number representing the value of the mean or difference in means  specified by the null hypothesis
   *sigma.x = a single number representing the population standard deviation for x
-  *sigma.y = a singlw number representing the population standard deviation for y
+  *sigma.y = a single number representing the population standard deviation for y
   
-*Syntax: z.test(x, y=NULL, alternative = "two-sided", mu = 0, sigma.x=NULL, sigma.y=NULL, conf.level=0.95)
+*Syntax: z.test(x, y=NULL, alternative = "two-sided", mu = $\theta$, sigma.x=NULL, sigma.y=NULL, conf.level=0.95)
 
 An R function called z.test() would be great for doing the kind of testing in which you use z-scores in the hypothesis test. One problem: that function does not exist in base R.  Although you can find one in other packages, it's easy enough to create one and learn a bit about R programming in the process. The function would work like this:
 
@@ -341,7 +362,7 @@ Results:
   *two-tailed probability = 0.084
   
 Begin by creating the function name and its arguments:
-  *z.test=function(x, mu, popvar){
+  *z.test=function(x, $\mu$, popvar){
     *The first argument is the vector of data, second is the population mean, third is the population variance. Left curly bracket signifies that the remainder of the code is what happens inside the function. 
 Next, create a vector that will hold the one-tailed probability of the z-score you will calculate:
   *one.tail.p <- NULL
@@ -355,28 +376,30 @@ The t.test() function produces a variety of t-tests.  Unlike most statistical pa
 
 A one-sample t-test is used to compare the mean of a population with a theortetical value. An unpaired two sample t-test is used to compare the mean of two independent samples.  A paired t-test is used to compare the means between two related groups of samples. The formula of a t-test depends on the mean and standard deviation of the data being compared.  
 
-  *One-Sample t-test: based on the theoretical mean(μ), the set of values with size n, the mean m, and the standard deviation σ.  The degrees of freedom is found with df=n-1.  
+  *One-Sample t-test: based on the theoretical mean(\mu), the set of values with size n, the mean m, and the standard deviation $\sigma$.  The degrees of freedom is found with (df=n-1).  
 
-$t = \frac{m-μ}{σ/\sqrt{n}}$
+$t = \frac{m-\mu}{\frac{\sigma}{\sqrt{n}}}$
 
   *Independent two-sample t-test
 Let A and B represent the two groups to compare. Let mA and mB represent the means of groups A and B, respectively.  Let nA and nB represent the sizes of group A and B respectively.  
 
-$t = \frac{mA - mB}{\sqrt{\frac{S^2}{nA} + \frac{S^2}{nB}}$
+$t = \frac{mA - mB}{\sqrt{\frac{S^2}{nA} + \frac{S^2}{nB}}}$
 
 S^2 is an estimator of the common variance of the two samples. 
 
 *Welch's T-Tests
 (or unequal variances t-test), is a two-sample location test which is used to test the hypothesis that the two populations have unequal means.  
 
+* independent two-sample t-test, where y is a numeric and x is a nibary factor
 ```{r message = FALSE}
-# independent 2-sample t-test, where y is numeric and x is a binary factor
 x=rnorm(10)
 y=rnorm(10)
 t.test(y,x)  #Welch's t-test
+```
 
-# one sample t-test
-t.test(y,mu=3) # Ho(null hypothesis): mu=3
+* one sample t-test, with a null hypothesis (Ho) mu=3
+```{r}
+t.test(y,mu=3) 
 ```
 
 *Mann-Whitney-Wilcoxon Test
@@ -389,17 +412,16 @@ mtcars$mpg
 wilcox.test(mpg ~ am, data=mtcars)
 ```
 
-
 # QQ Plots
 QQ Plots are used to visually test whether data follows an expected distribution.  They are used to verify that data used in a t-test is actually normally distributed.  QQ plots are not useful on small datasets.  
+
+* in console: install.packages("car")
 ```{r message = FALSE}
-#in console: install.packages("car")
 my_data <- ToothGrowth
 
 qqnorm(my_data$len, pch = 1, frame = FALSE)
 qqline(my_data$len, col = "steelblue", lwd=2)
 qqPlot(my_data$len)
-
 ```
 
 # The Correlation Coefficient (r)
@@ -419,10 +441,10 @@ R-Squared is the perectnage of the dependent variable variation that a linear mo
 
 $R^2 = \frac{variance explained by model}{total variance}$
 
-    *0% or and r-squared close to 0.000 represents a model that does not explain any of the variation in the resprinse (dependent) variable around its mean. The mean of the dependent variable predicts the dependent variable as well as the regression model. 
-    *100% or an r-squared of 1.00 represents a model that explains all of the variation in the response variable around its mean.
+  - 0% or and r-squared close to 0.000 represents a model that does not explain any of the variation in the resprinse (dependent) variable around its mean. The mean of the dependent variable predicts the dependent variable as well as the regression model. 
+  - 100% or an r-squared of 1.00 represents a model that explains all of the variation in the response variable around its mean.
 
-  *Example: The coefficient of determination (r squared) of the simple linear regression model for the data set below is 0.81146.  This means with an r-squared of 0.81146, then approximately 81.15% of the observed variation can be explained by the model's inputs.   
+  * Example: The coefficient of determination (r squared) of the simple linear regression model for the data set below is 0.81146.  This means with an r-squared of 0.81146, then approximately 81.15% of the observed variation can be explained by the model's inputs.   
   
 ```{r message = FALSE}
 #We apply the lm function to a formula that desribes the variable eruptions by the variable waiting, and save the linear regression model in a new variable eruption.lm.  
@@ -435,10 +457,11 @@ summary(eruption.lm)
 # Power Analysis
 The power of a statistical test is the probability that the test will reject a false null hypothesis.  Power analysis allows us to determine the sample size required to detect an effect of a given size with a given degree of confidence.  It also allows us to determine the probability of detecting an effect of a given size with a given level of confidence, under sample size constraints. 
 
-*Example: The function tells us we should flipthe coin 22.55126 times, which would round up to 23.  Always round sample size estimates up in power analyses.  If we are correct that our coin lands heads 75% of the time, we need to flip at least 23 times to have an 80% chance of correctly rejecting the null hypothesis at the 0.05 significance level.  
+*Example: The function tells us we should flip the coin 22.55126 times, which would round up to 23.  Always round sample size estimates up in power analyses.  If we are correct that our coin lands heads 75% of the time, we need to flip at least 23 times to have an 80% chance of correctly rejecting the null hypothesis at the 0.05 significance level.  
 
+
+* Syntax:
 ```{r message = FALSE}
-
 #pwr.2p.test -- two proportions (equal n)
 #pwr.2p2n.test -- two proportions(unequal n)
 #pwr.anova.test -- balanced one-way ANOVA
@@ -448,6 +471,9 @@ The power of a statistical test is the probability that the test will reject a f
 #pwr.r.test	-- correlation
 #pwr.t.test	-- t-tests (one sample, 2 sample, paired)
 #pwr.t2n.test	-- t-test (two samples with unequal n)
+```
+
+```{r}
 
 pwr.p.test(h=ES.h(p1=0.75, p2=0.50), 
            sig.level = 0.05,
@@ -488,7 +514,9 @@ mutate(poison = factor(poison, ordered = TRUE))
 glimpse(df)
 
 levels(df$poison)
-#Compute the mean and the standard deviation
+```
+* Compute the mean and the standard deviation
+```{r}
 df %>%
   group_by(poison)%>%
   summarise(
@@ -496,44 +524,51 @@ df %>%
     mean_time = mean(time, na.rm = TRUE),
     sd_time = sd(time, na.rm=TRUE)
   )
-#Graphically check if there is a difference between the distribution. 
+```
+* Graphically check if there is a difference between the distribution. 
+```{r}
 ggplot(df, aes(x = poison, y = time, fill = poison)) +
     geom_boxplot() +
     geom_jitter(shape = 15,
         color = "steelblue",
         position = position_jitter(0.21)) +
     theme_classic()
-#Run the one-way ANOVA test with the command aov. 
-#basic syntax for ANOVA test: aov(formula, data)
+```
+* Run the one-way ANOVA test with the command aov. 
+* Syntax: aov(formula, data)
+```{r}
 anova_one_way <- aov(time~poison, data = df)
 summary(anova_one_way)
-
-#Tukeys Test: 
+```
+* Tukeys Test: 
+```{r}
 TukeyHSD(anova_one_way)
-
-#ANOVA two-way test
+```
+*ANOVA two-way test
+```{r}
 anova_two_way <- aov(time~poison + treat, data = df)
 summary(anova_two_way)
 ```
 
 # Nonlinear Regression
-
+* Load the data
 ```{r message = FALSE}
 theme_set(theme_classic())
-# Load the data
 data("Boston", package = "MASS")
-# Split the data into training and test set
+```
+* Split the data into training and test set
+```{r}
 set.seed(123)
 training.samples <- Boston$medv %>%
   createDataPartition(p = 0.8, list = FALSE)
 train.data  <- Boston[training.samples, ]
 test.data <- Boston[-training.samples, ]
-
-#First, visualize the scatter plot of the medv vs lstat variables:
+```
+* First, visualize the scatter plot of the medv vs lstat variables:
+```{r}
 ggplot(train.data, aes(lstat, medv) ) +
   geom_point() +
   stat_smooth()
-
 ```
 
 The standard linear regression model equation can be writted as:
@@ -541,13 +576,16 @@ The standard linear regression model equation can be writted as:
 $medv = b0+b1*lstat$
 
 Compute the linear regression model:
-
+* Build the model
 ```{r message = FALSE}
-# Build the model
 model <- lm(medv ~ lstat, data = train.data)
-# Make predictions
+```
+* Make predictions
+```{r}
 predictions <- model %>% predict(test.data)
-# Model performance
+```
+* Model performance
+```{r}
 data.frame(
   RMSE = RMSE(predictions, test.data$medv),
   R2 = R2(predictions, test.data$medv)
@@ -555,7 +593,6 @@ data.frame(
 ggplot(train.data, aes(lstat, medv) ) +
   geom_point() +
   stat_smooth(method = lm, formula = y ~ x)
-
 ```
 
 # Polynomial Regression
@@ -568,12 +605,17 @@ lm(medv ~ poly(lstat, 2, raw = TRUE), data = train.data)
 
 lm(medv ~ poly(lstat, 6, raw = TRUE), data = train.data) %>%
   summary()
-
-# Build the model
+```
+* Build the model
+```{r}
 model <- lm(medv ~ poly(lstat, 5, raw = TRUE), data = train.data)
-# Make predictions
+```
+* Make predictions
+```{r}
 predictions <- model %>% predict(test.data)
-# Model performance
+```
+* Model performance
+```{r}
 data.frame(
   RMSE = RMSE(predictions, test.data$medv),
   R2 = R2(predictions, test.data$medv)
@@ -586,13 +628,17 @@ ggplot(train.data, aes(lstat, medv) ) +
 
 ## Log Transformation
 Log transformation: when you have a non-linear relationship, you can try a logarithmic transormation of the predictor variables: 
-```{r message = FALSE}
 
-# Build the model
+* Build the model
+```{r message = FALSE}
 model <- lm(medv ~ log(lstat), data = train.data)
-# Make predictions
+```
+* Make predictions
+```{r}
 predictions <- model %>% predict(test.data)
-# Model performance
+```
+* Model performance
+```{r}
 data.frame(
   RMSE = RMSE(predictions, test.data$medv),
   R2 = R2(predictions, test.data$medv)
