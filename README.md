@@ -1,4 +1,4 @@
-# Practical statistics for biologigsts
+# Practical statistics
 
 Statistical concepts and examples based on Justin Kinny's course Practical Statistics for Experimental Biologists 7/27 to 7/31/2020.  
 
