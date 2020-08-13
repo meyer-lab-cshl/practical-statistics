@@ -185,8 +185,6 @@ Prevalence is the fraction of individuals in a population who have a disease.
 * If a subject's sibling has AIP, there is a 50% chance that they do too. 
 $prevalence = p(disease^+) = 0.50$
 
-* Usage: prevalence(model, type = c("pop", "bnp", "wnp"), i=NULL, ...)
-
 ```{r message = FALSE}
 set.seed(0934)
 Data.All.df.2008 <- data.frame(FSA = sample(c("N8N", "N8R", "B3L", "P1H"), 50, T),
