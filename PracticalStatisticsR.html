@@ -1647,7 +1647,7 @@ summary {
 <li><a href="#positive-predictive-value-ppv">Positive Predictive Value (PPV)</a></li>
 <li><a href="#negative-predictive-value-npv">Negative Predictive Value (NPV)</a></li>
 <li><a href="#prevalence">Prevalence</a></li>
-<li><a href="#frequentist-vs.-bayesian-statistics">Frequentist vs. Bayesian Statistics</a></li>
+<li><a href="#frequentist-vs.bayesian-statistics">Frequentist vs. Bayesian Statistics</a></li>
 <li><a href="#fishers-exact-test">Fisher’s Exact Test</a></li>
 <li><a href="#bernoulli-distribution">Bernoulli Distribution</a></li>
 <li><a href="#binomial-tests">Binomial Tests</a></li>
@@ -1694,26 +1694,26 @@ library(pwr)</code></pre>
 </ul>
 <pre class="r"><code>print.data.frame(example_data)</code></pre>
 <pre><code>##    x1 x2
-## 1   d  A
-## 2   b  D
-## 3   e  D
-## 4   d  C
-## 5   a  C
-## 6   e  B
-## 7   d  B
-## 8   d  B
+## 1   d  B
+## 2   d  B
+## 3   b  A
+## 4   a  E
+## 5   a  D
+## 6   d  C
+## 7   a  A
+## 8   e  B
 ## 9   a  D
-## 10  a  B
-## 11  a  A
-## 12  c  D
-## 13  d  D
+## 10  d  A
+## 11  a  E
+## 12  b  E
+## 13  e  A
 ## 14  c  B
-## 15  d  D
-## 16  e  D
-## 17  e  E
-## 18  c  A
-## 19  c  E
-## 20  d  C</code></pre>
+## 15  a  B
+## 16  b  D
+## 17  a  D
+## 18  b  A
+## 19  c  C
+## 20  d  D</code></pre>
 <ul>
 <li>create a table</li>
 </ul>
@@ -1721,11 +1721,11 @@ library(pwr)</code></pre>
 print.table(my_table_0)</code></pre>
 <pre><code>##    
 ##     A B C D E
-##   a 1 1 1 1 0
-##   b 0 0 0 1 0
-##   c 1 1 0 1 1
-##   d 1 2 2 2 0
-##   e 0 1 0 2 1</code></pre>
+##   a 1 1 0 3 2
+##   b 2 0 0 1 1
+##   c 0 1 1 0 0
+##   d 1 2 1 1 0
+##   e 1 1 0 0 0</code></pre>
 <ul>
 <li>if we want to have row and column totals</li>
 </ul>
@@ -1733,12 +1733,12 @@ print.table(my_table_0)</code></pre>
 print.table(my_table_01)</code></pre>
 <pre><code>##      
 ##        A  B  C  D  E Sum
-##   a    1  1  1  1  0   4
-##   b    0  0  0  1  0   1
-##   c    1  1  0  1  1   4
-##   d    1  2  2  2  0   7
-##   e    0  1  0  2  1   4
-##   Sum  3  5  3  7  2  20</code></pre>
+##   a    1  1  0  3  2   7
+##   b    2  0  0  1  1   4
+##   c    0  1  1  0  0   2
+##   d    1  2  1  1  0   5
+##   e    1  1  0  0  0   2
+##   Sum  5  5  2  5  3  20</code></pre>
 <ul>
 <li>convert it to a dataframe</li>
 </ul>
@@ -1748,11 +1748,11 @@ print.table(my_table_01)</code></pre>
 </ul>
 <pre class="r"><code>print.data.frame(my_table_1)</code></pre>
 <pre><code>##   A B C D E
-## a 1 1 1 1 0
-## b 0 0 0 1 0
-## c 1 1 0 1 1
-## d 1 2 2 2 0
-## e 0 1 0 2 1</code></pre>
+## a 1 1 0 3 2
+## b 2 0 0 1 1
+## c 0 1 1 0 0
+## d 1 2 1 1 0
+## e 1 1 0 0 0</code></pre>
 <ul>
 <li>to have a table of proportions based on rows, and convert it to a dataframe</li>
 </ul>
@@ -1762,12 +1762,12 @@ print.table(my_table_01)</code></pre>
 <li>have a look at the table</li>
 </ul>
 <pre class="r"><code>print.data.frame(my_table_2, digits = 2)</code></pre>
-<pre><code>##      A    B    C    D    E
-## a 0.25 0.25 0.25 0.25 0.00
-## b 0.00 0.00 0.00 1.00 0.00
-## c 0.25 0.25 0.00 0.25 0.25
-## d 0.14 0.29 0.29 0.29 0.00
-## e 0.00 0.25 0.00 0.50 0.25</code></pre>
+<pre><code>##      A    B   C    D    E
+## a 0.14 0.14 0.0 0.43 0.29
+## b 0.50 0.00 0.0 0.25 0.25
+## c 0.00 0.50 0.5 0.00 0.00
+## d 0.20 0.40 0.2 0.20 0.00
+## e 0.50 0.50 0.0 0.00 0.00</code></pre>
 <ul>
 <li>to have a table of proportions based on columns</li>
 </ul>
@@ -1777,12 +1777,12 @@ print.table(my_table_01)</code></pre>
 <li>have a look at the table</li>
 </ul>
 <pre class="r"><code>print.data.frame(my_table_2, digits = 2)</code></pre>
-<pre><code>##      A    B    C    D    E
-## a 0.25 0.25 0.25 0.25 0.00
-## b 0.00 0.00 0.00 1.00 0.00
-## c 0.25 0.25 0.00 0.25 0.25
-## d 0.14 0.29 0.29 0.29 0.00
-## e 0.00 0.25 0.00 0.50 0.25</code></pre>
+<pre><code>##      A    B   C    D    E
+## a 0.14 0.14 0.0 0.43 0.29
+## b 0.50 0.00 0.0 0.25 0.25
+## c 0.00 0.50 0.5 0.00 0.00
+## d 0.20 0.40 0.2 0.20 0.00
+## e 0.50 0.50 0.0 0.00 0.00</code></pre>
 </div>
 <div id="sensitivity-and-specificity" class="section level1">
 <h1>Sensitivity and Specificity</h1>
@@ -1912,7 +1912,7 @@ Data.All.df.2008 &lt;- data.frame(FSA = sample(c(&quot;N8N&quot;, &quot;N8R&quot
   </script>
 </div>
 <ul>
-<li>Prevalence can be calculated as the number of positive diagnoses divided by the total number of observations, i.e. <code>sum(Lyme)/n()</code>.</li>
+<li>Prevalence can be calculated as the number of positive diagnoses divided by the total number of observations, i.e. <code>sum(Lyme)/n()</code>.</li>
 </ul>
 <pre class="r"><code>Data.All.df.2008 %&gt;%
   group_by(FSA) %&gt;%
@@ -1923,7 +1923,7 @@ Data.All.df.2008 &lt;- data.frame(FSA = sample(c(&quot;N8N&quot;, &quot;N8R&quot
   </script>
 </div>
 </div>
-<div id="frequentist-vs.-bayesian-statistics" class="section level1">
+<div id="frequentist-vs.bayesian-statistics" class="section level1">
 <h1>Frequentist vs. Bayesian Statistics</h1>
 <ul>
 <li><p>Frequentist Statistics (aka classical statistics) focuses on likelihood. It avoids calculations involving prior odds, and therefore yields results that are prone to misinterpretation due to the base rate fallacy. Frequentist statistics is used heavily in biological research. It can still be useful and informative if you know exactly what to watch out for</p>
@@ -1952,7 +1952,7 @@ Data.All.df.2008 &lt;- data.frame(FSA = sample(c(&quot;N8N&quot;, &quot;N8R&quot
                          Truth = c(&quot;Milk&quot;, &quot;Tea&quot;)))
 fisher.test(TeaTasting, alternative = &quot;greater&quot;)</code></pre>
 <pre><code>## 
-##  Fisher&#39;s Exact Test for Count Data
+##  Fisher's Exact Test for Count Data
 ## 
 ## data:  TeaTasting
 ## p-value = 0.2429
@@ -1970,7 +1970,7 @@ fisher.test(TeaTasting, alternative = &quot;greater&quot;)</code></pre>
 </div>
 <div id="binomial-tests" class="section level1">
 <h1>Binomial Tests</h1>
-<p>A binomial test compares the number of successes observed in a given number of trials with a hypothesized probability of success. The tes has the null hypothesis that the real probability of success is equal to some value denoted p. and thr alternative hypothesis that is not equal to p. The test can also be performed with a one-sided alternative hypothesis that the real probability of success is either greater than p or that it is less than p. </p>
+<p>A binomial test compares the number of successes observed in a given number of trials with a hypothesized probability of success. The tes has the null hypothesis that the real probability of success is equal to some value denoted p. and thr alternative hypothesis that is not equal to p. The test can also be performed with a one-sided alternative hypothesis that the real probability of success is either greater than p or that it is less than p.</p>
 <p>A one-tailed test with a significance level of 0.05 will be used. You roll the die 300 times and throw a total of 60 sixes. We cannot reject the null hypothesis that the probability of rolling a six is 1/6. This means that there is no evidence to prove that the die is not fair.</p>
 <ul>
 <li>Syntax: <code>binom.test(nsuccesses, ntrials, p)</code></li>
@@ -2007,7 +2007,7 @@ table(data_frame$treatment, data_frame$improvement)</code></pre>
 </ul>
 <pre class="r"><code>chisq.test(data_frame$treatment, data_frame$improvement, correct=FALSE)</code></pre>
 <pre><code>## 
-##  Pearson&#39;s Chi-squared test
+##  Pearson's Chi-squared test
 ## 
 ## data:  data_frame$treatment and data_frame$improvement
 ## X-squared = 5.5569, df = 1, p-value = 0.01841</code></pre>
@@ -2028,7 +2028,7 @@ table(mtcars$carb, mtcars$cyl)</code></pre>
 <pre><code>## Warning in chisq.test(mtcars$carb, mtcars$cyl): Chi-squared approximation may be
 ## incorrect</code></pre>
 <pre><code>## 
-##  Pearson&#39;s Chi-squared test
+##  Pearson's Chi-squared test
 ## 
 ## data:  mtcars$carb and mtcars$cyl
 ## X-squared = 24.389, df = 10, p-value = 0.006632</code></pre>
@@ -2099,8 +2099,8 @@ Data = read.table(textConnection(Input),header=TRUE)</code></pre>
 <p>An R function called z.test() would be great for doing the kind of testing in which you use z-scores in the hypothesis test. It could look like this:</p>
 <ul>
 <li><p>Syntax: z.test(x, y=NULL, alternative = “two-sided”, mu = <span class="math inline">\(\theta\)</span>, sigma.x=NULL, sigma.y=NULL, conf.level=0.95)</p></li>
-<li><p><span class="math inline">\(\mu\)</span> = a single number representing the value of the mean or difference in means specified by the null hypothesis</p></li>
-<li><p><span class="math inline">\(\sigma_x\)</span> = a single number representing the population standard deviation for x</p></li>
+<li><span class="math inline">\(\mu\)</span> = a single number representing the value of the mean or difference in means specified by the null hypothesis</li>
+<li><span class="math inline">\(\sigma_x\)</span> = a single number representing the population standard deviation for x</li>
 <li><p><span class="math inline">\(\sigma_y\)</span> = a single number representing the population standard deviation for y</p></li>
 </ul>
 <p>One problem: that function does not exist in base R. Although you can find one in other packages, it’s easy enough to create one and learn a bit about R programming in the process. The function would work like this:</p>
@@ -2127,7 +2127,7 @@ Data = read.table(textConnection(Input),header=TRUE)</code></pre>
 </ul>
 <pre class="r"><code>x=rnorm(10)
 y=rnorm(10)
-t.test(y,x)  #Welch&#39;s t-test</code></pre>
+t.test(y,x)  #Welch's t-test</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -2220,7 +2220,7 @@ summary(eruption.lm)$r.squared </code></pre>
 ## (Intercept) -1.874016   0.160143  -11.70   &lt;2e-16 ***
 ## waiting      0.075628   0.002219   34.09   &lt;2e-16 ***
 ## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 0.4965 on 270 degrees of freedom
 ## Multiple R-squared:  0.8115, Adjusted R-squared:  0.8108 
@@ -2346,7 +2346,7 @@ summary(anova_one_way)</code></pre>
 ## poison       2  1.033  0.5165   11.79 7.66e-05 ***
 ## Residuals   45  1.972  0.0438                     
 ## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <ul>
 <li>Tukeys Test:</li>
 </ul>
@@ -2371,7 +2371,7 @@ summary(anova_two_way)</code></pre>
 ## treat        3 0.9212  0.3071   12.27 6.7e-06 ***
 ## Residuals   42 1.0509  0.0250                    
 ## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 <div id="nonlinear-regression" class="section level1">
 <h1>Nonlinear Regression</h1>
@@ -2462,7 +2462,7 @@ lm(medv ~ poly(lstat, 2, raw = TRUE), data = train.data)</code></pre>
 ## poly(lstat, 6, raw = TRUE)5 -1.343e-04  6.290e-05  -2.136 0.033323 *  
 ## poly(lstat, 6, raw = TRUE)6  1.047e-06  5.481e-07   1.910 0.056910 .  
 ## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 5.188 on 400 degrees of freedom
 ## Multiple R-squared:  0.6845, Adjusted R-squared:  0.6798 
