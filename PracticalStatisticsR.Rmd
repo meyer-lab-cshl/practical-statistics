@@ -659,4 +659,19 @@ ggplot(train.data, aes(lstat, medv) ) +
   stat_smooth(method = lm, formula = y ~ log(x))
 ```
 
+# R Diagnostic Plots
+```{r}
+data(women) # Load a built-in data called ‘women’
+fit = lm(weight ~ height, women) # Run a regression analysis
+plot(fit)
 
+```
+Website: https://data.library.virginia.edu/diagnostic-plots/
+
+* A) Residuals vs Fitted: This plot shows if residuals have non-linear patterns.  There could be a non-linear relationship between predictor variables and an outcome variable and the pattern could shiw up in this plot if the model doesn't capture the non-linear relationship.  If you find equally spread residuals around a horizontal line without distinct patterns, that is a good indication you don't have non-linear relationships.  
+
+* B) Normal Q-Q Plot: This plot shows if residuals are normally distributed.  Do residuals follow a straight line well or do they deviate severely?  It's good if residuals are lined well on the straight dashed line. 
+
+* C) Scale Location Plot: also called Spread_Location plot.  This plot shows if residuals are spread equally along the ranges of predictors.  This is how you can check the assumption of equal variance.  It is good if you see a horizontal line with equally (randomly) spread points.  
+
+* D) Residuals vs Leverage Plot: This plot helps us to find influential cases (subjects) if any.  Not all outliers are influential in linear regression analysis (whatever outliers mean).  Even though data have extreme values, they might not be influential to determine a regression line.  That means, the results wouldn't be much different if we either include or exclude the from analysis.  They follow the trend in the majority of cases and they don't really matter; they are not influential.  On the other hand, some cases could be very influential even if they look to be within a reasonable range of the values.  They could be extreme cases against a regression line and can alter the results if we dont exclude them from analysis.  Another way to put it is that they don't get along with the trend in the majority of cases.  
