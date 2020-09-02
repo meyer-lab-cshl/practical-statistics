@@ -3,14 +3,14 @@ title: "Practical Statistics for Experimental Biologists in RStudio"
 author: "Caroline Walter"
 date: "August 2020"
 output:
-  html_document:
-    df_print: paged
-    toc: yes
-    toc_depth: '3'
   pdf_document:
     number_sections: yes
     toc: yes
     toc_depth: 3
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '3'
 ---
 
 # Background
@@ -197,7 +197,8 @@ options(show.error.messages = TRUE)
 Prevalence is the fraction of individuals in a population who have a disease. 
 
 * If a subject's sibling has AIP, there is a 50% chance that they do too. 
-$prevalence = p(disease^+) = 0.50$
+
+ $prevalence = p(disease^+) = 0.50$
 
 ```{r message = FALSE}
 set.seed(0934)
@@ -224,10 +225,11 @@ Data.All.df.2008 %>%
     - Base Rate Fallacy: If presented with related base rate information (generic, general information) and specific information (information pertaining only to a certain case), the mind tends to ignore the former and focus of the latter. (Individuals tend to focus on the specific information pertaining to that single case, instead of focusing on the generic information given.)
      
     - Iron Law of Frequentist Statistics: Never compute the probability of a hypothesis.
+    - Frequentist: $p(data|hypothesis)$
 
  * Bayesian Statistics explicitly accounts for prior odds. It focuses on computing posterior probabilities and requires prior information that is often hard to quantify. It is central to the modern machine learning and more advanced areas of quantitative biology. Experimental researchers in biology tend not to use Bayesian statistics. 
-  
-Frequentist vs Bayesian:  $p(data|hypothesis)$ vs $p(hypothesis|data)$.
+ 
+    - Bayesian: $p(hypothesis|data)$
 
 
 # Standard Error of the Mean (SEM)
@@ -268,7 +270,6 @@ Fisher's exact test is a statistical significance test used in the analysis of c
 Example: A British woman claimed to be able to distinguish whether milk or tea was added to the cup first.  To test, she was given 8 cups of tea, in four of which milk was added first.  The null hypothesis is that there is no association between the true order of pouring and the woman's guess, the alternative hypothesis is that there is a positive association (that the odds ratio is greater than 1).
 
 Syntax: 
-
 fisher.test(x, y = NULL, workspace = 200000, hybrid = FALSE,
             hybridPars = c(expect = 5, percent = 80, Emin = 1),
             control = list(), or = 1, alternative = "two.sided",
@@ -340,7 +341,7 @@ table(data_frame$treatment, data_frame$improvement)
 chisq.test(data_frame$treatment, data_frame$improvement, correct=FALSE)
 ```
 * Example B: Using the "mtcars" R package, we run a chi-squared test. Here, we get a high chi-squared value and a p-value of less than the 0.05 significance level.  Therefore, we can reject the null hypothesis and conclude that carb and cyl have a significant relationship.  
-```{r message = FALSE}
+```{r message = FALSE, warning = FALSE}
 data("mtcars")
 table(mtcars$carb, mtcars$cyl)
 chisq.test(mtcars$carb, mtcars$cyl)
@@ -360,10 +361,10 @@ In this setting:
  * The overall proportion of smokers is $\frac{490+400}{500+500}=89$
  * The overall proportion of non-smokers is $\ q=1-p=11$
  
-Formula of the test statistic: The test statistic (also knows as z-test) can be caluculated as follows:
+Formula of the test statistic: The test statistic (also knows as z-test) can be calculated as follows:
 $\ z= \frac{pA-pB}{\sqrt{\frac{pq}{nA}+\frac{pq}{nB}}}$
 where, 
-  * pA is the proportion observed in group A with sixe nA
+  * pA is the proportion observed in group A with size nA
   * pB is the proportion observed in group B with size nB
   * p and q are the overall proportions
 * If |z| < 1.96, then the difference is not significant at 5%
