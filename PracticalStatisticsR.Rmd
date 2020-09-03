@@ -3,14 +3,14 @@ title: "Practical Statistics for Experimental Biologists in RStudio"
 author: "Caroline Walter"
 date: "August 2020"
 output:
-  pdf_document:
-    number_sections: yes
-    toc: yes
-    toc_depth: 3
   html_document:
     df_print: paged
     toc: yes
     toc_depth: '3'
+  pdf_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
 ---
 
 # Background
@@ -35,6 +35,7 @@ library(pwr)
 ```
 
 # Contingecy Tables
+####What are they?
 
 * create an example data set
 ```{r message = FALSE}
@@ -111,7 +112,9 @@ $p(test^+|disease^+) = \frac{TP}{TP+FN}=\frac{82}{82+18}=0.82$
 
 $Specificity = p(test^-|disease^-)=0.963$
 
-* here is a helpful youtube video: https://www.youtube.com/watch?v=9f5XgjWpzi0
+* here are two helpful youtube videos:
+    - https://www.youtube.com/watch?v=9f5XgjWpzi0
+    - https://www.youtube.com/watch?v=UsOv0DcXk6w
 ```{r message = FALSE}
 devtools::install_github("datacamp/RDocumentation")
 
@@ -160,12 +163,12 @@ $p(disease^-|test^-)$
 ```{r message = FALSE}
 
 table(data03, ref03)
-specificity(data03, ref03) #0.75
+specificity(data03, ref03) 
 negPredValue(data03, ref03) 
 
 table(data04, ref04)
-specificity(data04, ref04) #1
-negPredValue(data04, ref04) #NaN
+specificity(data04, ref04)
+negPredValue(data04, ref04) 
 
 if(!isTRUE(all.equal(sensitivity(data01, ref01), .75))) stop("error in sensitivity test 1")
 if(!isTRUE(all.equal(sensitivity(data02, ref02), 0))) stop("error in sensitivity test 2")

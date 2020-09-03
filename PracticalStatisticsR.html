@@ -1684,6 +1684,7 @@ library(pwr)</code></pre>
 </div>
 <div id="contingecy-tables" class="section level1">
 <h1>Contingecy Tables</h1>
+<p>####What are they?</p>
 <ul>
 <li>create an example data set</li>
 </ul>
@@ -1694,26 +1695,26 @@ library(pwr)</code></pre>
 </ul>
 <pre class="r"><code>print.data.frame(example_data)</code></pre>
 <pre><code>##    x1 x2
-## 1   b  C
-## 2   a  B
-## 3   d  A
-## 4   a  B
-## 5   e  E
-## 6   e  B
-## 7   a  E
-## 8   d  E
-## 9   a  D
-## 10  e  B
-## 11  c  E
-## 12  a  D
-## 13  a  D
-## 14  b  E
-## 15  d  D
-## 16  a  B
-## 17  a  B
-## 18  a  B
-## 19  e  C
-## 20  c  A</code></pre>
+## 1   a  D
+## 2   e  E
+## 3   a  C
+## 4   d  C
+## 5   e  B
+## 6   b  B
+## 7   a  B
+## 8   b  C
+## 9   e  A
+## 10  b  E
+## 11  a  B
+## 12  c  D
+## 13  a  C
+## 14  b  D
+## 15  c  E
+## 16  e  E
+## 17  c  E
+## 18  c  B
+## 19  d  D
+## 20  c  B</code></pre>
 <ul>
 <li>create a table</li>
 </ul>
@@ -1721,11 +1722,11 @@ library(pwr)</code></pre>
 print.table(my_table_0)</code></pre>
 <pre><code>##    
 ##     A B C D E
-##   a 0 5 0 3 1
-##   b 0 0 1 0 1
-##   c 1 0 0 0 1
-##   d 1 0 0 1 1
-##   e 0 2 1 0 1</code></pre>
+##   a 0 2 2 1 0
+##   b 0 1 1 1 1
+##   c 0 2 0 1 2
+##   d 0 0 1 1 0
+##   e 1 1 0 0 2</code></pre>
 <ul>
 <li>if we want to have row and column totals</li>
 </ul>
@@ -1733,12 +1734,12 @@ print.table(my_table_0)</code></pre>
 print.table(my_table_01)</code></pre>
 <pre><code>##      
 ##        A  B  C  D  E Sum
-##   a    0  5  0  3  1   9
-##   b    0  0  1  0  1   2
-##   c    1  0  0  0  1   2
-##   d    1  0  0  1  1   3
-##   e    0  2  1  0  1   4
-##   Sum  2  7  2  4  5  20</code></pre>
+##   a    0  2  2  1  0   5
+##   b    0  1  1  1  1   4
+##   c    0  2  0  1  2   5
+##   d    0  0  1  1  0   2
+##   e    1  1  0  0  2   4
+##   Sum  1  6  4  4  5  20</code></pre>
 <ul>
 <li>convert it to a dataframe</li>
 </ul>
@@ -1748,11 +1749,11 @@ print.table(my_table_01)</code></pre>
 </ul>
 <pre class="r"><code>print.data.frame(my_table_1)</code></pre>
 <pre><code>##   A B C D E
-## a 0 5 0 3 1
-## b 0 0 1 0 1
-## c 1 0 0 0 1
-## d 1 0 0 1 1
-## e 0 2 1 0 1</code></pre>
+## a 0 2 2 1 0
+## b 0 1 1 1 1
+## c 0 2 0 1 2
+## d 0 0 1 1 0
+## e 1 1 0 0 2</code></pre>
 <ul>
 <li>to have a table of proportions based on rows, and convert it to a dataframe</li>
 </ul>
@@ -1763,11 +1764,11 @@ print.table(my_table_01)</code></pre>
 </ul>
 <pre class="r"><code>print.data.frame(my_table_2, digits = 2)</code></pre>
 <pre><code>##      A    B    C    D    E
-## a 0.00 0.56 0.00 0.33 0.11
-## b 0.00 0.00 0.50 0.00 0.50
-## c 0.50 0.00 0.00 0.00 0.50
-## d 0.33 0.00 0.00 0.33 0.33
-## e 0.00 0.50 0.25 0.00 0.25</code></pre>
+## a 0.00 0.40 0.40 0.20 0.00
+## b 0.00 0.25 0.25 0.25 0.25
+## c 0.00 0.40 0.00 0.20 0.40
+## d 0.00 0.00 0.50 0.50 0.00
+## e 0.25 0.25 0.00 0.00 0.50</code></pre>
 <ul>
 <li>to have a table of proportions based on columns</li>
 </ul>
@@ -1778,11 +1779,11 @@ print.table(my_table_01)</code></pre>
 </ul>
 <pre class="r"><code>print.data.frame(my_table_2, digits = 2)</code></pre>
 <pre><code>##      A    B    C    D    E
-## a 0.00 0.56 0.00 0.33 0.11
-## b 0.00 0.00 0.50 0.00 0.50
-## c 0.50 0.00 0.00 0.00 0.50
-## d 0.33 0.00 0.00 0.33 0.33
-## e 0.00 0.50 0.25 0.00 0.25</code></pre>
+## a 0.00 0.40 0.40 0.20 0.00
+## b 0.00 0.25 0.25 0.25 0.25
+## c 0.00 0.40 0.00 0.20 0.40
+## d 0.00 0.00 0.50 0.50 0.00
+## e 0.25 0.25 0.00 0.00 0.50</code></pre>
 </div>
 <div id="confidence-intervals-and-p-values" class="section level1">
 <h1>Confidence Intervals and P-values</h1>
@@ -1814,7 +1815,11 @@ print.table(my_table_01)</code></pre>
 </ul>
 <p><span class="math inline">\(Specificity = p(test^-|disease^-)=0.963\)</span></p>
 <ul>
-<li>here is a helpful youtube video: <a href="https://www.youtube.com/watch?v=9f5XgjWpzi0" class="uri">https://www.youtube.com/watch?v=9f5XgjWpzi0</a></li>
+<li>here are two helpful youtube videos:
+<ul>
+<li><a href="https://www.youtube.com/watch?v=9f5XgjWpzi0" class="uri">https://www.youtube.com/watch?v=9f5XgjWpzi0</a></li>
+<li><a href="https://www.youtube.com/watch?v=UsOv0DcXk6w" class="uri">https://www.youtube.com/watch?v=UsOv0DcXk6w</a></li>
+</ul></li>
 </ul>
 <pre class="r"><code>devtools::install_github(&quot;datacamp/RDocumentation&quot;)
 
@@ -1871,7 +1876,7 @@ ref04 &lt;- factor(c(&quot;B&quot;, &quot;A&quot;, &quot;B&quot;, &quot;B&quot;)
 ## data03 A B
 ##      A 0 1
 ##      B 0 3</code></pre>
-<pre class="r"><code>specificity(data03, ref03) #0.75</code></pre>
+<pre class="r"><code>specificity(data03, ref03) </code></pre>
 <pre><code>## [1] 0.75</code></pre>
 <pre class="r"><code>negPredValue(data03, ref03) </code></pre>
 <pre><code>## [1] NA</code></pre>
@@ -1879,9 +1884,9 @@ ref04 &lt;- factor(c(&quot;B&quot;, &quot;A&quot;, &quot;B&quot;, &quot;B&quot;)
 <pre><code>##       ref04
 ## data04 A B
 ##      B 1 3</code></pre>
-<pre class="r"><code>specificity(data04, ref04) #1</code></pre>
+<pre class="r"><code>specificity(data04, ref04)</code></pre>
 <pre><code>## [1] 1</code></pre>
-<pre class="r"><code>negPredValue(data04, ref04) #NaN</code></pre>
+<pre class="r"><code>negPredValue(data04, ref04) </code></pre>
 <pre><code>## [1] NaN</code></pre>
 <pre class="r"><code>if(!isTRUE(all.equal(sensitivity(data01, ref01), .75))) stop(&quot;error in sensitivity test 1&quot;)
 if(!isTRUE(all.equal(sensitivity(data02, ref02), 0))) stop(&quot;error in sensitivity test 2&quot;)
@@ -1912,8 +1917,9 @@ options(show.error.messages = TRUE)</code></pre>
 <h1>Prevalence</h1>
 <p>Prevalence is the fraction of individuals in a population who have a disease.</p>
 <ul>
-<li>If a subject’s sibling has AIP, there is a 50% chance that they do too. <span class="math inline">\(prevalence = p(disease^+) = 0.50\)</span></li>
+<li>If a subject’s sibling has AIP, there is a 50% chance that they do too.</li>
 </ul>
+<p><span class="math inline">\(prevalence = p(disease^+) = 0.50\)</span></p>
 <pre class="r"><code>set.seed(0934)
 Data.All.df.2008 &lt;- data.frame(FSA = sample(c(&quot;N8N&quot;, &quot;N8R&quot;, &quot;B3L&quot;, &quot;P1H&quot;), 50, T),
                                Lyme = sample(0:1, 50, T),
@@ -1946,10 +1952,13 @@ Data.All.df.2008 &lt;- data.frame(FSA = sample(c(&quot;N8N&quot;, &quot;N8R&quot
 <ul>
 <li><p>Base Rate Fallacy: If presented with related base rate information (generic, general information) and specific information (information pertaining only to a certain case), the mind tends to ignore the former and focus of the latter. (Individuals tend to focus on the specific information pertaining to that single case, instead of focusing on the generic information given.)</p></li>
 <li><p>Iron Law of Frequentist Statistics: Never compute the probability of a hypothesis.</p></li>
+<li><p>Frequentist: <span class="math inline">\(p(data|hypothesis)\)</span></p></li>
 </ul></li>
-<li><p>Bayesian Statistics explicitly accounts for prior odds. It focuses on computing posterior probabilities and requires prior information that is often hard to quantify. It is central to the modern machine learning and more advanced areas of quantitative biology. Experimental researchers in biology tend not to use Bayesian statistics.</p></li>
+<li><p>Bayesian Statistics explicitly accounts for prior odds. It focuses on computing posterior probabilities and requires prior information that is often hard to quantify. It is central to the modern machine learning and more advanced areas of quantitative biology. Experimental researchers in biology tend not to use Bayesian statistics.</p>
+<ul>
+<li>Bayesian: <span class="math inline">\(p(hypothesis|data)\)</span></li>
+</ul></li>
 </ul>
-<p>Frequentist vs Bayesian: <span class="math inline">\(p(data|hypothesis)\)</span> vs <span class="math inline">\(p(hypothesis|data)\)</span>.</p>
 </div>
 <div id="standard-error-of-the-mean-sem" class="section level1">
 <h1>Standard Error of the Mean (SEM)</h1>
@@ -1990,8 +1999,7 @@ Data = read.table(textConnection(Input),header=TRUE)</code></pre>
 <h1>Fisher’s Exact Test</h1>
 <p>Fisher’s exact test is a statistical significance test used in the analysis of contingency tables and in place of chi square test in 2 by 2 tables, especially in cases of small samples. The test is useful for categorical data that result from classifying objects in two different ways; it is used to examine the significance of the association (contingency) between the two kinds of classification.</p>
 <p>Example: A British woman claimed to be able to distinguish whether milk or tea was added to the cup first. To test, she was given 8 cups of tea, in four of which milk was added first. The null hypothesis is that there is no association between the true order of pouring and the woman’s guess, the alternative hypothesis is that there is a positive association (that the odds ratio is greater than 1).</p>
-<p>Syntax:</p>
-<p>fisher.test(x, y = NULL, workspace = 200000, hybrid = FALSE, hybridPars = c(expect = 5, percent = 80, Emin = 1), control = list(), or = 1, alternative = “two.sided”, conf.int = TRUE, conf.level = 0.95, simulate.p.value = FALSE, B = 2000)</p>
+<p>Syntax: fisher.test(x, y = NULL, workspace = 200000, hybrid = FALSE, hybridPars = c(expect = 5, percent = 80, Emin = 1), control = list(), or = 1, alternative = “two.sided”, conf.int = TRUE, conf.level = 0.95, simulate.p.value = FALSE, B = 2000)</p>
 <pre class="r"><code>TeaTasting &lt;-
   matrix(c(3,1,1,3), 
          nrow=2, 
@@ -2087,8 +2095,6 @@ table(mtcars$carb, mtcars$cyl)</code></pre>
 ##   6 0 1 0
 ##   8 0 0 1</code></pre>
 <pre class="r"><code>chisq.test(mtcars$carb, mtcars$cyl)</code></pre>
-<pre><code>## Warning in chisq.test(mtcars$carb, mtcars$cyl): Chi-squared approximation may be
-## incorrect</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
 ## 
@@ -2101,7 +2107,7 @@ table(mtcars$carb, mtcars$cyl)</code></pre>
 Example: We have two groups of individuals: * Group A with lung cancer; n=500 * Group B, healthy individuals; n=500</p>
 <p>The number of smokers in each group is as follows: * Group A with lung cancer; n=500, 490 smokers, pA = 490/500 = 98 * Group B, healthy individuals; n=500, 400 smokers, pB = 400/500 = 80</p>
 <p>In this setting: * The overall proportion of smokers is <span class="math inline">\(\frac{490+400}{500+500}=89\)</span> * The overall proportion of non-smokers is <span class="math inline">\(\ q=1-p=11\)</span></p>
-<p>Formula of the test statistic: The test statistic (also knows as z-test) can be caluculated as follows: <span class="math inline">\(\ z= \frac{pA-pB}{\sqrt{\frac{pq}{nA}+\frac{pq}{nB}}}\)</span> where, * pA is the proportion observed in group A with sixe nA * pB is the proportion observed in group B with size nB * p and q are the overall proportions * If |z| &lt; 1.96, then the difference is not significant at 5% * If |z| &gt;= 1.96, then the difference is significant at 5% * The significance level (p-value) corresponding to the z-statistic can be read in the z-table. Lets see how to compute it in R.</p>
+<p>Formula of the test statistic: The test statistic (also knows as z-test) can be calculated as follows: <span class="math inline">\(\ z= \frac{pA-pB}{\sqrt{\frac{pq}{nA}+\frac{pq}{nB}}}\)</span> where, * pA is the proportion observed in group A with size nA * pB is the proportion observed in group B with size nB * p and q are the overall proportions * If |z| &lt; 1.96, then the difference is not significant at 5% * If |z| &gt;= 1.96, then the difference is significant at 5% * The significance level (p-value) corresponding to the z-statistic can be read in the z-table. Lets see how to compute it in R.</p>
 <p>** The Fisher Exact Test is an excellent non-parametric technique for comparing proportions, when the two independent samples are small in size.</p>
 <p>Syntax: prop.test(x, n, p=NULL, alternative = “two.sided”, correct=TRUE)</p>
 <ul>
