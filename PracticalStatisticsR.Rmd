@@ -35,7 +35,8 @@ library(pwr)
 ```
 
 # Contingecy Tables
-####What are they?
+
+Contingency tables (also called crosstabs or two-way tables) are used in statistics to summarize the relationship between several categorical variables. A contingency table is a special type of frequency distribution table, where two variables are shown simultaneously.
 
 * create an example data set
 ```{r message = FALSE}
@@ -86,19 +87,34 @@ print.data.frame(my_table_2, digits = 2)
 
 # Confidence Intervals and P-values
 * P-values quantify the probability of data being as or more extreme than the data in hand, were the null hypothesis true.  
+* In statistics, the p-value is the probability of obtaining results as extreme as the observed results of a statistical hypothesis test, assuming that the null hypothesis is correct. 
+* The p-value is used as an alternative to rejection points to provide the smallest level of significance at which the null hypothesis would be rejected. 
+* A smaller p-value means that there is stronger evidence in favor of the alternative hypothesis.
+
+* The confidence interval (CI) is a range of values that’s likely to include a population value with a certain degree of confidence. It is often expressed a % whereby a population means lies between an upper and lower interval.
+* The 95% confidence interval is a range of values that you can be 95% certain contains the true mean of the population. As the sample size increases, the range of interval values will narrow, meaning that you know that mean with much more accuracy compared with a smaller sample.
 * Confidence Intervals are more informative than p-values. We can reject a null hypothesis if it lies outside of the confidence interval. 
 
 # The Correlation Coefficient (r)
 The main result of a correlation is called the correlation coefficient ("r").  It ranges from -1 to 1.  The closer r is to -1 or 1, the more closely the two variables are (inversely) related.  If r is close to 0, it means there is no relationship between the variables.
+
+Correlation coefficients are used in statistics to measure how strong a relationship is between two variables. 
+
 * When r=0, the two variables are independent. 
-* When r=+1/-1, the two variables share a deterministic linear relationship.  
+* When r= 1, the two variables have a strong positive correlation or relationship. 
+* When r = -1, the two variables have a strong negative correlation/relationship.
 
 # The Coefficient of Determination (r squared)
+R-squared (R2) is a statistical measure that represents the proportion of the variance for a dependent variable that's explained by an independent variable or variables in a regression model.  
+  - Correlation explains the strength of th relationship between an independent and dependent variable, r-squared explains to what extent the variance of one variable explains the variance of the second variable. 
+  
 R-squared is always between 0 and 1.  It is commonly interpreted as the fraction of variance in y explained by x (or the other way around).  It is a goodness-of-fit measure for linear regression models.  This statistics indicates a percentage of the variance in the dependent variable that the independent variables explain collectively. T-squared measures the strength of the relationship between your model and the dependent variable on a convenient 0-100% scale.
 
-After fitting a linear regression modelto the data (by using a least-squares regression line), we need to determine how well the model fits the data.  
+After fitting a linear regression model to the data (by using a least-squares regression line), we need to determine how well the model fits the data.  
 
 # Sensitivity and Specificity
+In medical diagnosis, test sensitivity is the ability of a test to correctly identify those with the disease (true positive rate), whereas test specificity is the ability of the test to correctly identify those without the disease (true negative rate).
+
 
 For the AIP test: AIP (Acute Intermediate Porphyria) is a rare metabolic disorder.   
 
@@ -448,6 +464,57 @@ Example:  At the 0.05 significance level, we conclude that the gas mileage data 
 mtcars$mpg
 wilcox.test(mpg ~ am, data=mtcars)
 ```
+
+# ANOVA tests (Analysis of Variance)
+ANOVA is a statistical test for estimating how a quantitative dependent variable changes according to the levels of one or more categorical independent variables.  ANOVA tests whether there is a difference in means of the groups at each level of the independent variable.
+
+Example: You can check the levels of poison with the following. You should see three character values because you convert them in factor with the mutate verb. 
+
+```{r message = FALSE}
+PATH<- "https://raw.githubusercontent.com/guru99-edu/R-Programming/master/poisons.csv"
+df <- read.csv(PATH) %>%
+  select(-X) %>% 
+  mutate(poison = factor(poison, ordered = TRUE))
+glimpse(df)
+
+levels(df$poison)
+```
+* Compute the mean and the standard deviation
+```{r}
+df %>%
+  group_by(poison)%>%
+  summarise(
+    count_poison = n(), 
+    mean_time = mean(time, na.rm = TRUE),
+    sd_time = sd(time, na.rm=TRUE)
+  )
+```
+* Graphically check if there is a difference between the distribution. 
+```{r}
+ggplot(df, aes(x = poison, y = time, fill = poison)) +
+  geom_boxplot() +
+  geom_jitter(shape = 15,
+              color = "steelblue",
+              position = position_jitter(0.21)) +
+  theme_classic()
+```
+* Run the one-way ANOVA test with the command aov. 
+
+* Syntax: `aov(formula, data)`
+```{r}
+anova_one_way <- aov(time~poison, data = df)
+summary(anova_one_way)
+```
+* Tukeys Test: 
+```{r}
+TukeyHSD(anova_one_way)
+```
+* ANOVA two-way test
+```{r}
+anova_two_way <- aov(time~poison + treat, data = df)
+summary(anova_two_way)
+```
+
 # Assessing Goodness-of-Fit in a Regression Model
 Linear Regression identifies the equation that produces the smallest difference between all of the observed values and their fitted values.  Linear regression finds the smallest sum of squared residuals that is possible for the dataset (least-squares regression line). 
 
@@ -658,53 +725,3 @@ qqnorm(my_data$len, pch = 1, frame = FALSE)
 qqPlot(my_data$len)
 ```
 
-
-# ANOVA tests (Analysis of Variance)
-ANOVA is a statistical test for estimating how a quantitative dependent variable changes according to the levels of one or more categorical independent variables.  ANOVA tests whether there is a difference in means of the groups at each level of the independent variable.
-
-Example: You can check the levels of poison with the following. You should see three character values because you convert them in factor with the mutate verb. 
-
-```{r message = FALSE}
-PATH<- "https://raw.githubusercontent.com/guru99-edu/R-Programming/master/poisons.csv"
-df <- read.csv(PATH) %>%
-  select(-X) %>% 
-  mutate(poison = factor(poison, ordered = TRUE))
-glimpse(df)
-
-levels(df$poison)
-```
-* Compute the mean and the standard deviation
-```{r}
-df %>%
-  group_by(poison)%>%
-  summarise(
-    count_poison = n(), 
-    mean_time = mean(time, na.rm = TRUE),
-    sd_time = sd(time, na.rm=TRUE)
-  )
-```
-* Graphically check if there is a difference between the distribution. 
-```{r}
-ggplot(df, aes(x = poison, y = time, fill = poison)) +
-  geom_boxplot() +
-  geom_jitter(shape = 15,
-              color = "steelblue",
-              position = position_jitter(0.21)) +
-  theme_classic()
-```
-* Run the one-way ANOVA test with the command aov. 
-
-* Syntax: `aov(formula, data)`
-```{r}
-anova_one_way <- aov(time~poison, data = df)
-summary(anova_one_way)
-```
-* Tukeys Test: 
-```{r}
-TukeyHSD(anova_one_way)
-```
-* ANOVA two-way test
-```{r}
-anova_two_way <- aov(time~poison + treat, data = df)
-summary(anova_two_way)
-```
