@@ -3,14 +3,14 @@ title: "Practical Statistics for Experimental Biologists in RStudio"
 author: "Caroline Walter"
 date: "August 2020"
 output:
-  html_document:
-    df_print: paged
-    toc: yes
-    toc_depth: '3'
   pdf_document:
     number_sections: yes
     toc: yes
     toc_depth: 3
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '3'
 ---
 
 # Background
@@ -34,7 +34,7 @@ library(car)
 library(pwr)
 ```
 
-# Contingecy Tables
+# Contingency Tables
 
 Contingency tables (also called crosstabs or two-way tables) are used in statistics to summarize the relationship between several categorical variables. A contingency table is a special type of frequency distribution table, where two variables are shown simultaneously.
 
@@ -348,7 +348,7 @@ Chi Square tests are used to determine if two categorical variables have a signi
 $\chi^2=\Sigma \frac {(obersverd - expected)^2}{expected}$
 
 
-* Syntax: `chisp.test(data)`
+* Syntax: `chisq.test(data)`
 
 * importing data, have a look at the table
 ```{r message = FALSE}
@@ -426,7 +426,7 @@ The `t.test()` function produces a variety of t-tests.  Unlike most statistical 
 
 A one-sample t-test is used to compare the mean of a population with a theoretical value. An unpaired two sample t-test is used to compare the mean of two independent samples.  A paired t-test is used to compare the means between two related groups of samples. The formula of a t-test depends on the mean and standard deviation of the data being compared.  
 
-* One-Sample t-test: based on the theoretical mean($\mu$), the set of values with size n, the mean $\m$, and the standard deviation $\sigma$.  The degrees of freedom is found with (df=n-1).  
+* One-Sample t-test: based on the theoretical mean($\mu$), the set of values with size n, the mean $\mu$, and the standard deviation $\sigma$.  The degrees of freedom is found with (df=n-1).  
 
  ** Degrees of Freedom are the number of independent values that a statistical analysis
  can estimate.  You also think of it as the number of values that are free to vary as you estimate parameters. 
