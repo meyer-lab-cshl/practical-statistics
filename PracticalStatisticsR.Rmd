@@ -505,10 +505,7 @@ ggplot(df, aes(x = poison, y = time, fill = poison)) +
 anova_one_way <- aov(time~poison, data = df)
 summary(anova_one_way)
 ```
-* Tukeys Test: 
-```{r}
-TukeyHSD(anova_one_way)
-```
+
 * ANOVA two-way test
 ```{r}
 anova_two_way <- aov(time~poison + treat, data = df)
@@ -691,23 +688,29 @@ ggplot(train.data, aes(lstat, medv) ) +
   stat_smooth(method = lm, formula = y ~ log(x))
 ```
 # R Diagnostic Plots
+take a look at the dataframe
 ```{r}
-data(women) # Load a built-in data called ‘women’
-```
-
-take a look at the 'women' dataframe
-```{r}
+data(women)
 women
+# Load a built-in data called ‘women’
 ```
 
+plot this data
 ```{r}
 fit = lm(weight ~ height, women) # Run a regression analysis
 plot(fit)
 
 ```
+
+if you want to look at four plots rather than one by one:
+```{r}
+par(mfrow=c(2,2)) # Change the panel layout to 2 x 2
+plot(fit)
+par(mfrow=c(1,1)) # Change back to 1 x 1
+```
 Website: https://data.library.virginia.edu/diagnostic-plots/
 
-* A) Residuals vs Fitted: This plot shows if residuals have non-linear patterns.  There could be a non-linear relationship between predictor variables and an outcome variable and the pattern could show up in this plot if the model doesn't capture the non-linear relationship.  If you find equally spread residuals around a horizontal line without distinct patterns, that is a good indication you don't have non-linear relationships.  
+* A) Residuals vs Fitted: When conducting a residual analysis, a "residuals vs fitted lot" is the most frequently created plot. It is a scatter plot of residuals on the y axis and fitted values (estimated responses) on the x-axis. This plot shows if residuals have non-linear patterns.  There could be a non-linear relationship between predictor variables and an outcome variable and the pattern could show up in this plot if the model doesn't capture the non-linear relationship.  If you find equally spread residuals around a horizontal line without distinct patterns, that is a good indication you don't have non-linear relationships.  
 
 * B) Normal Q-Q Plot: This plot shows if residuals are normally distributed.  Do residuals follow a straight line well or do they deviate severely?  It's good if residuals are lined well on the straight dashed line. 
 
